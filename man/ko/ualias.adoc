@@ -17,7 +17,7 @@ ualias - USB 장치 별칭 조회 또는 추가
 
 == Description
 
-*/etc/udev/devices* 의 별칭 표를 읽고(*UALIAS_DEVICES* 로 덮어쓸 수 있음)
+*/etc/udev/ualias.d* 의 별칭 표를 읽고(*UALIAS_DIR* 로 덮어쓸 수 있음)
 일치하는 별칭을 출력하거나, 이름이 주어지면 새 패턴을 추가합니다.
 
 파일의 주석이 아닌 각 줄은 네 필드입니다:
@@ -60,8 +60,8 @@ ualias - USB 장치 별칭 조회 또는 추가
 
 == Environment
 
-*UALIAS_DEVICES*::
-  장치 표 경로. 기본값: */etc/udev/devices*.
+*UALIAS_DIR*::
+  장치 표 경로. 기본값: */etc/udev/ualias.d*.
 
 *UALIAS_LOCALEDIR*::
   gettext 로케일 디렉터리를 덮어씁니다.
@@ -97,7 +97,7 @@ ualias - USB 장치 별칭 조회 또는 추가
 
 == Files
 
-*/etc/udev/devices*::
+*/etc/udev/ualias.d*::
   기본 별칭 표.
 
 == Author

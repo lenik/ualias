@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-use std::fs::{File, OpenOptions};
+use std::fs::{self, File, OpenOptions};
 use std::io::{self, BufRead, BufReader, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use thiserror::Error;
 
-/// Default USB alias table path.
-pub const DEFAULT_DEVICES_PATH: &str = "/etc/udev/devices";
+/// Default drop-in directory for USB alias tables.
+pub const DEFAULT_UALIAS_DIR: &str = "/etc/udev/ualias.d";
+
+/// File within the drop-in directory used when appending a new pattern.
+pub const APPEND_FILENAME: &str = "local";
 
 #[derive(Error, Debug)]
 pub enum UaliasError {
@@ -19,7 +22,7 @@ pub enum UaliasError {
     NoMatch,
 }
 
-/// One row from the devices file: `VENDOR PRODUCT SERIAL NAME`.
+/// One row from an alias file: `VENDOR PRODUCT SERIAL NAME`.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct DevicePattern {
     pub vendor: String,
@@ -110,18 +113,77 @@ pub fn parse_devices(text: &str) -> Result<Vec<DevicePattern>, UaliasError> {
     Ok(out)
 }
 
-/// Load and parse the devices file at `path`.
-pub fn load_devices(path: &Path) -> Result<Vec<DevicePattern>, UaliasError> {
+/// Whether `name` should be loaded from a `*.d` drop-in directory.
+pub fn is_dropin_filename(name: &str) -> bool {
+    if name.is_empty() || name.starts_with('.') {
+        return false;
+    }
+    if name.ends_with('~') {
+        return false;
+    }
+    // Packaging leftovers / editor backups
+    for needle in [".dpkg-", ".rpm", ".bak", ".old", ".orig", ".swp"] {
+        if name.contains(needle) {
+            return false;
+        }
+    }
+    true
+}
+
+/// Sorted list of regular drop-in files under `dir`.
+pub fn list_dropin_files(dir: &Path) -> Result<Vec<PathBuf>, UaliasError> {
+    let mut files = Vec::new();
+    let rd = match fs::read_dir(dir) {
+        Ok(rd) => rd,
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(files),
+        Err(e) => return Err(e.into()),
+    };
+    for entry in rd {
+        let entry = entry?;
+        let ft = entry.file_type()?;
+        if !ft.is_file() {
+            continue;
+        }
+        let name = entry.file_name();
+        let Some(name) = name.to_str() else {
+            continue;
+        };
+        if !is_dropin_filename(name) {
+            continue;
+        }
+        files.push(entry.path());
+    }
+    files.sort();
+    Ok(files)
+}
+
+/// Load and parse a single alias file.
+pub fn load_devices_file(path: &Path) -> Result<Vec<DevicePattern>, UaliasError> {
     let file = File::open(path)?;
     let mut text = String::new();
     for line in BufReader::new(file).lines() {
         text.push_str(&line?);
         text.push('\n');
     }
-    parse_devices(&text)
+    parse_devices(&text).map_err(|e| match e {
+        UaliasError::InvalidLine(msg) => {
+            UaliasError::InvalidLine(format!("{}: {msg}", path.display()))
+        }
+        other => other,
+    })
 }
 
-/// First matching pattern in file order, or [`UaliasError::NoMatch`].
+/// Load patterns from every drop-in file under `dir`, in sorted filename order.
+/// Missing directory yields an empty pattern list (no error).
+pub fn load_devices_dir(dir: &Path) -> Result<Vec<DevicePattern>, UaliasError> {
+    let mut out = Vec::new();
+    for path in list_dropin_files(dir)? {
+        out.extend(load_devices_file(&path)?);
+    }
+    Ok(out)
+}
+
+/// First matching pattern in order, or [`UaliasError::NoMatch`].
 pub fn lookup_name(
     patterns: &[DevicePattern],
     vendor: Option<&str>,
@@ -136,16 +198,23 @@ pub fn lookup_name(
     Err(UaliasError::NoMatch)
 }
 
-/// Append one pattern line to `path`, creating the file if needed.
-pub fn append_pattern(path: &Path, pattern: &DevicePattern) -> Result<(), UaliasError> {
-    let needs_nl = match std::fs::metadata(path) {
+/// Path of the file used for append mode inside `dir`.
+pub fn append_file_path(dir: &Path) -> PathBuf {
+    dir.join(APPEND_FILENAME)
+}
+
+/// Append one pattern line to `dir/local`, creating the directory if needed.
+pub fn append_pattern(dir: &Path, pattern: &DevicePattern) -> Result<(), UaliasError> {
+    fs::create_dir_all(dir)?;
+    let path = append_file_path(dir);
+    let needs_nl = match fs::metadata(&path) {
         Ok(meta) if meta.len() > 0 => {
-            let data = std::fs::read(path)?;
+            let data = fs::read(&path)?;
             !matches!(data.last(), Some(b'\n'))
         }
         _ => false,
     };
-    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
+    let mut file = OpenOptions::new().create(true).append(true).open(&path)?;
     if needs_nl {
         file.write_all(b"\n")?;
     }
@@ -182,15 +251,17 @@ mod tests {
 303a 1001 * s3g
 ";
 
-    fn tmp_path(tag: &str) -> std::path::PathBuf {
-        std::env::temp_dir().join(format!(
+    fn tmp_dir(tag: &str) -> PathBuf {
+        let p = std::env::temp_dir().join(format!(
             "ualias-{}-{}",
             tag,
             SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
                 .as_nanos()
-        ))
+        ));
+        fs::create_dir_all(&p).unwrap();
+        p
     }
 
     #[test]
@@ -215,7 +286,6 @@ mod tests {
         let pats = parse_devices(SAMPLE).unwrap();
         let name = lookup_name(&pats, Some("303a"), Some("1001"), Some("DEADBEEF")).unwrap();
         assert_eq!(name, "s3g");
-        // Case-insensitive vendor/product
         let name = lookup_name(&pats, Some("303A"), Some("1001"), Some("xx")).unwrap();
         assert_eq!(name, "s3g");
     }
@@ -242,21 +312,62 @@ mod tests {
     }
 
     #[test]
+    fn dropin_filename_filter() {
+        assert!(is_dropin_filename("10-serials"));
+        assert!(is_dropin_filename("local"));
+        assert!(!is_dropin_filename(".hidden"));
+        assert!(!is_dropin_filename("local~"));
+        assert!(!is_dropin_filename("foo.dpkg-old"));
+        assert!(!is_dropin_filename("foo.bak"));
+    }
+
+    #[test]
+    fn load_dir_sorted_and_merge() {
+        let dir = tmp_dir("merge");
+        fs::write(dir.join("20-fallback"), "303a 1001 * s3g\n").unwrap();
+        fs::write(
+            dir.join("10-serials"),
+            "* * 44:1B:F6:D7:92:5C s3cam\n* * AA:BB:CC:DD:EE:FF other\n",
+        )
+        .unwrap();
+        fs::write(dir.join(".skip"), "* * 00:00:00:00:00:00 hidden\n").unwrap();
+        fs::write(dir.join("local~"), "* * 11:11:11:11:11:11 backup\n").unwrap();
+
+        let pats = load_devices_dir(&dir).unwrap();
+        assert_eq!(pats.len(), 3);
+        assert_eq!(pats[0].name, "s3cam");
+        assert_eq!(pats[1].name, "other");
+        assert_eq!(pats[2].name, "s3g");
+
+        let name = lookup_name(&pats, Some("303a"), Some("1001"), Some("DEAD")).unwrap();
+        assert_eq!(name, "s3g");
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn missing_dir_is_empty() {
+        let dir = tmp_dir("missing-parent").join("nope");
+        let pats = load_devices_dir(&dir).unwrap();
+        assert!(pats.is_empty());
+        let _ = fs::remove_dir_all(dir.parent().unwrap());
+    }
+
+    #[test]
     fn append_and_reload() {
-        let path = tmp_path("append");
-        let _ = std::fs::remove_file(&path);
+        let dir = tmp_dir("append");
         let pat = pattern_for_append(None, None, Some("AA:BB:CC:DD:EE:FF"), "newt");
-        append_pattern(&path, &pat).unwrap();
+        append_pattern(&dir, &pat).unwrap();
         append_pattern(
-            &path,
+            &dir,
             &pattern_for_append(Some("303a"), Some("1001"), None, "s3g"),
         )
         .unwrap();
-        let pats = load_devices(&path).unwrap();
+        let pats = load_devices_dir(&dir).unwrap();
         assert_eq!(pats.len(), 2);
         assert_eq!(pats[0].to_line(), "* * AA:BB:CC:DD:EE:FF newt");
         assert_eq!(pats[1].to_line(), "303a 1001 * s3g");
-        let _ = std::fs::remove_file(&path);
+        assert!(append_file_path(&dir).ends_with(APPEND_FILENAME));
+        let _ = fs::remove_dir_all(&dir);
     }
 
     #[test]

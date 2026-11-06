@@ -17,7 +17,7 @@ ualias - USB デバイス別名の検索または追加
 
 == Description
 
-*/etc/udev/devices* の別名表を読み（*UALIAS_DEVICES* で上書き可）、一致する別名を
+*/etc/udev/ualias.d* の別名表を読み（*UALIAS_DIR* で上書き可）、一致する別名を
 出力するか、名前が与えられたときに新しいパターンを追加します。
 
 ファイルのコメント以外の各行は 4 フィールドです:
@@ -61,8 +61,8 @@ ualias - USB デバイス別名の検索または追加
 
 == Environment
 
-*UALIAS_DEVICES*::
-  デバイス表のパス。既定: */etc/udev/devices*。
+*UALIAS_DIR*::
+  デバイス表のパス。既定: */etc/udev/ualias.d*。
 
 *UALIAS_LOCALEDIR*::
   gettext のロケールディレクトリを上書きします。
@@ -98,7 +98,7 @@ ualias - USB デバイス別名の検索または追加
 
 == Files
 
-*/etc/udev/devices*::
+*/etc/udev/ualias.d*::
   既定の別名表。
 
 == Author

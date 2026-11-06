@@ -1,6 +1,6 @@
 # ualias
 
-`ualias` 根据 `/etc/udev/devices` 中的表查找或追加 USB 设备别名。
+`ualias` 根据 `/etc/udev/ualias.d/*` 中的 drop-in 文件查找或追加 USB 设备别名。
 
 ## 用法
 
@@ -13,28 +13,34 @@ ualias [选项]... [序列号 [名称]]
 - `-w`, `--vendor ID` — USB 厂商 ID（十六进制）
 - `-p`, `--product ID` — USB 产品 ID（十六进制）
 - `-s`, `--serial SERIAL` — 设备序列号 / MAC
-- `-n`, `--name NAME` — 别名（指定后进入追加模式）
+- `-n`, `--name NAME` — 别名（追加到 `ualias.d/local`）
 - `-u`, `--ucfirst` — 将别名首字母大写
 - `-h`, `--help`
 - `--version`
 
-未指定名称时，输出匹配到的别名（无匹配则退出码 `1`）。指定名称时追加一条
-规则；未给出的厂商/产品/序列号字段写为 `*`。
+未指定名称时，输出匹配到的别名（无匹配则退出码 `1`）。指定名称时追加到
+`local`；未给出的厂商/产品/序列号字段写为 `*`。
 
-规则按文件顺序匹配。示例：
+目录中的文件按文件名排序读取（跳过隐藏文件、备份与打包残留）。示例：
 
 ```text
+/etc/udev/ualias.d/10-serials
+/etc/udev/ualias.d/20-fallback
+```
+
+```text
+# 10-serials
 #VENDOR PRODUCT SERIAL NAME
 * * 44:1B:F6:D7:92:5C s3cam
 * * 10:20:BA:3D:30:28 s3tlcd3.49in
-* * 3C:DC:75:70:15:2C s3tlcd2.0in
-* * 44:1B:F6:D2:22:1F s3cam
+
+# 20-fallback
 303a 1001 * s3g
 ```
 
 ESP32-S3（`303a:1001`）若序列号未单独列出，会回落到 `s3g`。
 
-可用环境变量 `UALIAS_DEVICES` 覆盖表路径（便于测试）。
+可用 `UALIAS_DIR`（或旧名 `UALIAS_DEVICES`）覆盖目录路径。
 
 ## 构建与测试
 

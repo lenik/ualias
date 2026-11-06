@@ -17,8 +17,8 @@ ualias - consultar o añadir alias de dispositivos USB
 
 == Description
 
-Lee la tabla de alias en */etc/udev/devices* (se puede anular con
-*UALIAS_DEVICES*) e imprime el alias coincidente, o añade un patrón cuando se
+Lee la tabla de alias en */etc/udev/ualias.d* (se puede anular con
+*UALIAS_DIR*) e imprime el alias coincidente, o añade un patrón cuando se
 indica un nombre.
 
 Cada línea no comentada del archivo tiene cuatro campos:
@@ -63,8 +63,8 @@ omitidos se escriben como *\**.
 
 == Environment
 
-*UALIAS_DEVICES*::
-  Ruta de la tabla. Predeterminado: */etc/udev/devices*.
+*UALIAS_DIR*::
+  Ruta de la tabla. Predeterminado: */etc/udev/ualias.d*.
 
 *UALIAS_LOCALEDIR*::
   Anular el directorio de locales gettext.
@@ -100,7 +100,7 @@ Añadir un respaldo de proveedor/producto:
 
 == Files
 
-*/etc/udev/devices*::
+*/etc/udev/ualias.d*::
   Tabla de alias predeterminada.
 
 == Author

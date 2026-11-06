@@ -17,18 +17,18 @@ ualias - 查找或追加 USB 设备别名
 
 == Description
 
-读取 */etc/udev/devices* 中的别名表（可用环境变量
-*UALIAS_DEVICES* 覆盖），打印匹配的别名，或在指定名称时追加一条规则。
+读取 */etc/udev/ualias.d/** 中的 drop-in 别名表（可用环境变量
+*UALIAS_DIR* 覆盖），打印匹配的别名，或在指定名称时追加一条规则。
 
-设备文件中每个非注释行包含四个字段：
+目录中的文件按文件名排序读取。每个非注释行包含四个字段：
 
   VENDOR PRODUCT SERIAL NAME
 
-字段值为 *\** 时表示通配。按文件顺序尝试，首次匹配生效。因此通常先写具体序列号行，再写厂商/产品回落规则，例如 ESP32-S3 的 *303a 1001 \* s3g*。
+字段值为 *\** 时表示通配。按合并后的顺序尝试，首次匹配生效。因此通常先写具体序列号行，再写厂商/产品回落规则，例如 ESP32-S3 的 *303a 1001 \* s3g*。
 
 未指定 *--name*（或位置参数 _名称_）时，将匹配到的别名打印到标准输出。若无匹配，打印错误并以状态码 1 退出。
 
-指定名称时追加一条规则。省略的厂商、产品或序列号字段写为 *\**。
+指定名称时追加到 *ualias.d/local*（必要时创建目录与文件）。省略的厂商、产品或序列号字段写为 *\**。
 
 == Options
 
@@ -57,8 +57,11 @@ ualias - 查找或追加 USB 设备别名
 
 == Environment
 
+*UALIAS_DIR*::
+  drop-in 目录路径。默认：*/etc/udev/ualias.d*。
+
 *UALIAS_DEVICES*::
-  设备表路径。默认：*/etc/udev/devices*。
+  作为 *UALIAS_DIR* 的兼容别名。
 
 *UALIAS_LOCALEDIR*::
   覆盖 gettext 区域目录。
@@ -84,7 +87,7 @@ ualias - 查找或追加 USB 设备别名
 
   ualias -w 303a -p 1001 -s DEADBEEF
 
-追加序列号映射：
+追加序列号映射（写入 */etc/udev/ualias.d/local*）：
 
   ualias 44:1B:F6:D7:92:5C s3cam
 
@@ -94,8 +97,11 @@ ualias - 查找或追加 USB 设备别名
 
 == Files
 
-*/etc/udev/devices*::
-  默认别名表。
+*/etc/udev/ualias.d/**::
+  drop-in 别名表（按文件名排序）。
+
+*/etc/udev/ualias.d/local*::
+  追加模式使用的默认文件。
 
 == Author
 

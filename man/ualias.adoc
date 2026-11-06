@@ -17,23 +17,26 @@ ualias - look up or append USB device aliases
 
 == Description
 
-Read the alias table at */etc/udev/devices* (override with the
-*UALIAS_DEVICES* environment variable) and either print the matching alias
-name, or append a new pattern when a name is given.
+Read alias tables from drop-in files under */etc/udev/ualias.d/*
+(override with *UALIAS_DIR*) and either print the matching alias name, or
+append a new pattern when a name is given.
 
-Each non-comment line in the devices file has four fields:
+Files in the directory are read in sorted name order. Hidden names, backups
+(*~*, *.bak*, *.old*, …), and packaging leftovers (*.dpkg-**, *.rpm**) are
+skipped. Each non-comment line has four fields:
 
   VENDOR PRODUCT SERIAL NAME
 
-A field value of *\** is a wildcard. Lines are tried in file order; the first
-match wins. Specific serial rows are therefore usually listed before a
-vendor/product fallback such as *303a 1001 \* s3g* for ESP32-S3 boards.
+A field value of *\** is a wildcard. Lines are tried in that combined order;
+the first match wins. Specific serial rows are therefore usually listed before
+a vendor/product fallback such as *303a 1001 \* s3g* for ESP32-S3 boards.
 
 Without *--name* (or positional _NAME_), print the matched alias to standard
 output. If nothing matches, print an error and exit with status 1.
 
-With a name, append a new pattern. Omitted vendor, product, or serial fields
-are written as *\**.
+With a name, append a new pattern to *ualias.d/local* (creating the directory
+and file if needed). Omitted vendor, product, or serial fields are written as
+*\**.
 
 == Options
 
@@ -64,8 +67,11 @@ are written as *\**.
 
 == Environment
 
+*UALIAS_DIR*::
+  Path to the drop-in directory. Default: */etc/udev/ualias.d*.
+
 *UALIAS_DEVICES*::
-  Path to the devices table. Default: */etc/udev/devices*.
+  Accepted as an alias of *UALIAS_DIR* for compatibility.
 
 *UALIAS_LOCALEDIR*::
   Override the gettext locale directory.
@@ -92,7 +98,7 @@ table (falls through to *s3g*):
 
   ualias -w 303a -p 1001 -s DEADBEEF
 
-Append a serial mapping:
+Append a serial mapping (written to */etc/udev/ualias.d/local*):
 
   ualias 44:1B:F6:D7:92:5C s3cam
 
@@ -102,8 +108,11 @@ Append a vendor/product fallback:
 
 == Files
 
-*/etc/udev/devices*::
-  Default alias table.
+*/etc/udev/ualias.d/**::
+  Drop-in alias tables (sorted by filename).
+
+*/etc/udev/ualias.d/local*::
+  Default file used when appending.
 
 == Author
 

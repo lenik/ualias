@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "PO-Revision-Date: 2026-08-20 09:03+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -19,43 +19,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "ব্যবহার: ualias [বিকল্প]... [সিরিয়াল [নাম]]\n"
-"/etc/udev/devices-এ USB ডিভাইস উপনাম খুঁজুন বা যোগ করুন।\n"
-"--name (বা নাম) না থাকলে মিলে যাওয়া উপনাম মুদ্রণ করুন। নাম থাকলে প্যাটার্ন যোগ করুন।\n"
+"/etc/udev/ualias.d/*-এ USB ডিভাইস উপনাম খুঁজুন বা যোগ করুন।\n"
+"--name (বা নাম) না থাকলে মিলে যাওয়া উপনাম মুদ্রণ করুন। নাম থাকলে ualias.d/local-এ যোগ করুন।\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "বাগ রিপোর্ট করুন: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "USB বিক্রেতা আইডি (hex)\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "USB পণ্য আইডি (hex)\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "ডিভাইস সিরিয়াল / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "উপনাম (যোগ মোড)\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "নামের প্রথম অক্ষর বড় হাতের করুন\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "এই সহায়তা দেখান এবং প্রস্থান করুন\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "সংস্করণ তথ্য দেখান এবং প্রস্থান করুন\n"
 
@@ -84,19 +84,19 @@ msgstr "এই প্রকল্প নির্বোধ MIT-শৈলী ও 
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "আইনের অনুমোদিত সীমায় কোনো ওয়ারেন্টি নেই।\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "ডিভাইস সিরিয়াল / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "উপনাম (যোগ মোড)"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: বিক্রেতা, পণ্য, সিরিয়াল বা নাম নেই\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "কোনো মিলে যাওয়া উপনাম নেই"

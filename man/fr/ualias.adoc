@@ -17,8 +17,8 @@ ualias - consulter ou ajouter des alias de périphériques USB
 
 == Description
 
-Lit la table d'alias dans */etc/udev/devices* (surchargeable avec
-*UALIAS_DEVICES*) et affiche l'alias correspondant, ou ajoute un motif lorsqu'un
+Lit la table d'alias dans */etc/udev/ualias.d* (surchargeable avec
+*UALIAS_DIR*) et affiche l'alias correspondant, ou ajoute un motif lorsqu'un
 nom est fourni.
 
 Chaque ligne non commentée du fichier comporte quatre champs :
@@ -63,8 +63,8 @@ sont écrits comme *\**.
 
 == Environment
 
-*UALIAS_DEVICES*::
-  Chemin de la table. Par défaut : */etc/udev/devices*.
+*UALIAS_DIR*::
+  Chemin de la table. Par défaut : */etc/udev/ualias.d*.
 
 *UALIAS_LOCALEDIR*::
   Remplacer le répertoire de locales gettext.
@@ -100,7 +100,7 @@ Ajouter un repli vendeur/produit :
 
 == Files
 
-*/etc/udev/devices*::
+*/etc/udev/ualias.d*::
   Table d'alias par défaut.
 
 == Author

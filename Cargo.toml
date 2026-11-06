@@ -1,8 +1,8 @@
 [package]
 name = "ualias"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
-description = "Look up or append USB device aliases from /etc/udev/devices"
+description = "Look up or append USB device aliases from /etc/udev/ualias.d"
 license = "AGPL-3.0"
 repository = "https://github.com/lenik/ualias"
 authors = ["Lenik <ualias@bodz.net>"]

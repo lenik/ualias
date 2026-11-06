@@ -17,8 +17,8 @@ ualias - USB-Gerätealiase nachschlagen oder anhängen
 
 == Description
 
-Liest die Aliastabelle unter */etc/udev/devices* (überschreibbar mit
-*UALIAS_DEVICES*) und gibt den passenden Alias aus oder hängt bei Angabe eines
+Liest die Aliastabelle unter */etc/udev/ualias.d* (überschreibbar mit
+*UALIAS_DIR*) und gibt den passenden Alias aus oder hängt bei Angabe eines
 Namens ein neues Muster an.
 
 Jede Nicht-Kommentarzeile der Datei hat vier Felder:
@@ -63,8 +63,8 @@ Serienfelder werden als *\** geschrieben.
 
 == Environment
 
-*UALIAS_DEVICES*::
-  Pfad zur Gerätetabelle. Standard: */etc/udev/devices*.
+*UALIAS_DIR*::
+  Pfad zur Gerätetabelle. Standard: */etc/udev/ualias.d*.
 
 *UALIAS_LOCALEDIR*::
   Gettext-Locale-Verzeichnis überschreiben.
@@ -101,7 +101,7 @@ Hersteller/Produkt-Fallback anhängen:
 
 == Files
 
-*/etc/udev/devices*::
+*/etc/udev/ualias.d*::
   Standard-Aliastabelle.
 
 == Author

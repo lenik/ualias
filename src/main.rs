@@ -10,8 +10,8 @@ use clap::Command;
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, gettext, setlocale, textdomain, LocaleCategory};
 
 use ualias::{
-    append_pattern, load_devices, lookup_name, pattern_for_append, ucfirst, DevicePattern,
-    UaliasError, DEFAULT_DEVICES_PATH,
+    append_pattern, load_devices_dir, lookup_name, pattern_for_append, ucfirst, DevicePattern,
+    UaliasError, DEFAULT_UALIAS_DIR,
 };
 
 const TEXT_DOMAIN: &str = "ualias";
@@ -61,8 +61,8 @@ fn c_format_replace(template: &str, pairs: &[(&str, &str)]) -> String {
 fn usage() {
     let msg = gettext(
         "Usage: ualias [OPTION]... [SERIAL [NAME]]\n\
-Look up or append a USB device alias in /etc/udev/devices.\n\
-Without --name (or NAME), print the matching alias. With a name, append a pattern.\n",
+Look up or append a USB device alias in /etc/udev/ualias.d/*.\n\
+Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n",
     );
     let bugs = c_format_replace(
         &gettext("Report bugs to: <%s>\n"),
@@ -112,11 +112,15 @@ fn self_exe() -> String {
         .unwrap_or_else(|| "ualias".to_string())
 }
 
-fn devices_path() -> PathBuf {
+fn ualias_dir() -> PathBuf {
+    if let Ok(s) = std::env::var("UALIAS_DIR") {
+        return PathBuf::from(s);
+    }
+    // Backward-compatible override name from the single-file era.
     if let Ok(s) = std::env::var("UALIAS_DEVICES") {
         return PathBuf::from(s);
     }
-    PathBuf::from(DEFAULT_DEVICES_PATH)
+    PathBuf::from(DEFAULT_UALIAS_DIR)
 }
 
 fn maybe_ucfirst(name: &str, enabled: bool) -> String {
@@ -264,23 +268,23 @@ fn run() -> i32 {
         return 1;
     }
 
-    let path = devices_path();
+    let dir = ualias_dir();
 
     if let Some(name) = name {
         let name = maybe_ucfirst(name, do_ucfirst);
         let pat: DevicePattern = pattern_for_append(vendor, product, serial, &name);
-        if let Err(e) = append_pattern(&path, &pat) {
-            eprintln!("{exe}: {}: {e}", path.display());
+        if let Err(e) = append_pattern(&dir, &pat) {
+            eprintln!("{exe}: {}: {e}", dir.display());
             return 1;
         }
         return 0;
     }
 
     // Lookup mode
-    let patterns = match load_devices(&path) {
+    let patterns = match load_devices_dir(&dir) {
         Ok(p) => p,
         Err(e) => {
-            eprintln!("{exe}: {}: {e}", path.display());
+            eprintln!("{exe}: {}: {e}", dir.display());
             return 1;
         }
     };

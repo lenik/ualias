@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ualias\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "Language: zh_TW\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,43 +10,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "用法：ualias [選項]... [序號 [名稱]]\n"
-"在 /etc/udev/devices 中查找或追加 USB 裝置別名。\n"
-"未指定 --name（或 NAME）時列印匹配的別名；指定名稱則追加一條規則。\n"
+"在 /etc/udev/ualias.d/* 中查找或追加 USB 裝置別名。\n"
+"未指定 --name（或 NAME）時列印匹配的別名；指定名稱則追加到 ualias.d/local。\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "回報問題到：<%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "USB 廠商 ID（十六進位）\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "USB 產品 ID（十六進位）\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "裝置序號 / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "別名（追加模式）\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "將別名的首字母大寫\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "顯示此說明並結束\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "輸出版本資訊並結束\n"
 
@@ -75,19 +75,19 @@ msgstr "本專案反對無腦 MIT 式授權與政治愚蠢 BSD 式授權。\n"
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "在法律允許範圍內，不提供任何保證。\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "裝置序號 / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "別名（追加模式）"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: 缺少廠商、產品、序號或名稱\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "無匹配的別名"

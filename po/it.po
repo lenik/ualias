@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ualias\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,43 +10,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "Uso: ualias [OPZIONE]... [SERIALE [NOME]]\n"
-"Cerca o aggiunge un alias di dispositivo USB in /etc/udev/devices.\n"
-"Senza --name (o NOME), stampa l'alias corrispondente. Con un nome, aggiunge un modello.\n"
+"Cerca o aggiunge un alias di dispositivo USB in /etc/udev/ualias.d/*.\n"
+"Senza --name (o NOME), stampa l'alias corrispondente. Con un nome, aggiunge in ualias.d/local.\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "Segnala bug a: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "ID fornitore USB (hex)\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "ID prodotto USB (hex)\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "seriale dispositivo / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "nome alias (modalità aggiunta)\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "rendi maiuscola la prima lettera del nome\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "mostra questo aiuto ed esce\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "mostra le informazioni di versione ed esce\n"
 
@@ -75,19 +75,19 @@ msgstr "Questo progetto rifiuta licenze in stile MIT acritiche e licenze in stil
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "NON c'e ALCUNA GARANZIA, nei limiti consentiti dalla legge.\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "seriale dispositivo / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "nome alias (modalità aggiunta)"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: manca fornitore, prodotto, seriale o nome\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "nessun alias corrispondente"

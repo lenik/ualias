@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ualias\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "Language: ja\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,43 +10,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "使い方: ualias [オプション]... [シリアル [名前]]\n"
-"/etc/udev/devices で USB デバイス別名を検索または追加します。\n"
-"--name（または名前）がなければ一致する別名を表示し、あればパターンを追加します。\n"
+"/etc/udev/ualias.d/* で USB デバイス別名を検索または追加します。\n"
+"--name（または名前）がなければ一致する別名を表示し、あれば ualias.d/local に追加します。\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "不具合報告先: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "USB ベンダー ID（16 進）\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "USB プロダクト ID（16 進）\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "デバイスシリアル / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "別名（追加モード）\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "名前の先頭文字を大文字にする\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "このヘルプを表示して終了\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "バージョン情報を表示して終了\n"
 
@@ -75,19 +75,19 @@ msgstr "このプロジェクトは無批判な MIT 型ライセンスと政治�
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "法の許す範囲で一切の保証はありません。\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "デバイスシリアル / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "別名（追加モード）"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: ベンダー、プロダクト、シリアルまたは名前がありません\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "一致する別名がありません"

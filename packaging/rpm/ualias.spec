@@ -25,10 +25,10 @@ BuildRequires:  pkg-config
 BuildRequires:  asciidoctor
 
 %description
-ualias reads /etc/udev/devices and prints the matching USB device alias, or
-appends a new vendor/product/serial pattern when a name is given. Patterns
-are matched in file order so specific serials can fall back to a
-vendor/product wildcard.
+ualias reads drop-in files under /etc/udev/ualias.d and prints the matching
+USB device alias, or appends a new vendor/product/serial pattern to
+ualias.d/local when a name is given. Patterns are matched in sorted file
+order so specific serials can fall back to a vendor/product wildcard.
 
 %prep
 %setup -q -n %{name}-%{srcversion}

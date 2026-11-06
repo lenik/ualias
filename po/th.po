@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ualias\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "Language: th\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,43 +10,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "การใช้: ualias [ตัวเลือก]... [ซีเรียล [ชื่อ]]\n"
-"ค้นหาหรือเพิ่มนามแฝงอุปกรณ์ USB ใน /etc/udev/devices\n"
-"ถ้าไม่มี --name (หรือชื่อ) จะพิมพ์นามแฝงที่ตรงกัน ถ้ามีชื่อจะเพิ่มรูปแบบ\n"
+"ค้นหาหรือเพิ่มนามแฝงอุปกรณ์ USB ใน /etc/udev/ualias.d/*\n"
+"ถ้าไม่มี --name (หรือชื่อ) จะพิมพ์นามแฝงที่ตรงกัน ถ้ามีชื่อจะเพิ่มลง ualias.d/local\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "รายงานบั๊กไปที่: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "รหัสผู้ผลิต USB (hex)\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "รหัสผลิตภัณฑ์ USB (hex)\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "หมายเลขซีเรียลอุปกรณ์ / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "ชื่อนามแฝง (โหมดเพิ่ม)\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "ทำตัวอักษรแรกของชื่อเป็นตัวใหญ่\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "แสดงความช่วยเหลือนี้และออก\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "แสดงข้อมูลเวอร์ชันและออก\n"
 
@@ -75,19 +75,19 @@ msgstr "โครงการนี้ปฏิเสธใบอนุญาต
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "ไม่มีการรับประกันใด ๆ ตามขอบเขตที่กฎหมายอนุญาต\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "หมายเลขซีเรียลอุปกรณ์ / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "ชื่อนามแฝง (โหมดเพิ่ม)"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: ขาดผู้ผลิต ผลิตภัณฑ์ ซีเรียล หรือชื่อ\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "ไม่พบนามแฝงที่ตรงกัน"

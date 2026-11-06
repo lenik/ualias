@@ -1,3 +1,10 @@
+ualias (0.0.3) unstable; urgency=medium
+
+  * Load alias patterns from /etc/udev/ualias.d/* instead of a single
+    devices file.
+
+ -- Lenik (谢继雷) <lenik@bodz.net>  Fri, 06 Nov 2026 17:50:06 +0800
+
 ualias (0.0.2) unstable; urgency=medium
 
   * Implement USB device alias lookup/append against /etc/udev/devices.

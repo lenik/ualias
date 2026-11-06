@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "PO-Revision-Date: 2026-08-20 09:03+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -19,43 +19,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "பயன்பாடு: ualias [விருப்பங்கள்]... [வரிசைஎண் [பெயர்]]\n"
-"/etc/udev/devices இல் USB சாதன மாற்றுப்பெயரைத் தேடவும் அல்லது சேர்க்கவும்.\n"
-"--name (அல்லது பெயர்) இல்லையெனில் பொருந்தும் மாற்றுப்பெயரை அச்சிடுக. பெயர் இருந்தால் ஒரு வார்ப்புருவைச் சேர்க்கவும்.\n"
+"/etc/udev/ualias.d/* இல் USB சாதன மாற்றுப்பெயரைத் தேடவும் அல்லது சேர்க்கவும்.\n"
+"--name (அல்லது பெயர்) இல்லையெனில் பொருந்தும் மாற்றுப்பெயரை அச்சிடுக. பெயர் இருந்தால் ualias.d/local இல் சேர்க்கவும்.\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "பிழைகளை அறிவிக்க: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "USB விற்பனையாளர் அடையாளம் (hex)\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "USB தயாரிப்பு அடையாளம் (hex)\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "சாதன வரிசைஎண் / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "மாற்றுப்பெயர் (சேர்க்கும் முறை)\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "பெயரின் முதல் எழுத்தை பெரிதாக்கு\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "இந்த உதவியைக் காட்டி வெளியேறு\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "பதிப்புத் தகவலைக் காட்டி வெளியேறு\n"
 
@@ -84,19 +84,19 @@ msgstr "இந்த திட்டம் சிந்தனையற்ற MIT
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "சட்டம் அனுமதிக்கும் அளவில் எந்த உத்தரவாதமும் இல்லை.\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "சாதன வரிசைஎண் / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "மாற்றுப்பெயர் (சேர்க்கும் முறை)"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: விற்பனையாளர், தயாரிப்பு, வரிசைஎண் அல்லது பெயர் இல்லை\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "பொருந்தும் மாற்றுப்பெயர் இல்லை"

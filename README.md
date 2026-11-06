@@ -1,7 +1,7 @@
 # ualias
 
-`ualias` looks up or appends USB device aliases using the table at
-`/etc/udev/devices`.
+`ualias` looks up or appends USB device aliases using drop-in files under
+`/etc/udev/ualias.d/*`.
 
 ## Usage
 
@@ -14,29 +14,37 @@ Options:
 - `-w`, `--vendor ID` — USB vendor id (hex)
 - `-p`, `--product ID` — USB product id (hex)
 - `-s`, `--serial SERIAL` — device serial / MAC
-- `-n`, `--name NAME` — alias name (enables append mode)
+- `-n`, `--name NAME` — alias name (appends to `ualias.d/local`)
 - `-u`, `--ucfirst` — uppercase the first letter of the name
 - `-h`, `--help`
 - `--version`
 
 Without a name, print the matched alias (exit `1` if none). With a name,
-append a pattern; omitted vendor/product/serial fields are stored as `*`.
+append a pattern to `local`; omitted vendor/product/serial fields are stored
+as `*`.
 
-Patterns are tried in file order. Example table:
+Files in the directory are read in sorted name order (hidden / backup /
+packaging leftovers skipped). Example layout:
 
 ```text
+/etc/udev/ualias.d/10-serials
+/etc/udev/ualias.d/20-fallback
+```
+
+```text
+# 10-serials
 #VENDOR PRODUCT SERIAL NAME
 * * 44:1B:F6:D7:92:5C s3cam
 * * 10:20:BA:3D:30:28 s3tlcd3.49in
-* * 3C:DC:75:70:15:2C s3tlcd2.0in
-* * 44:1B:F6:D2:22:1F s3cam
+
+# 20-fallback
 303a 1001 * s3g
 ```
 
 An ESP32-S3 device (`303a:1001`) whose serial is not listed falls through to
 `s3g`.
 
-Override the table path with `UALIAS_DEVICES` (useful for tests).
+Override the directory with `UALIAS_DIR` (or legacy `UALIAS_DEVICES`).
 
 ## Build and test
 

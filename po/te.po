@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: ualias@bodz.net\n"
-"POT-Creation-Date: 2026-11-06 14:45+0800\n"
+"POT-Creation-Date: 2026-11-06 17:51+0800\n"
 "PO-Revision-Date: 2026-08-20 09:03+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -19,43 +19,43 @@ msgstr ""
 #: src/main.rs:63
 msgid ""
 "Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
-"Look up or append a USB device alias in /etc/udev/devices.\n"
-"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
+"Look up or append a USB device alias in /etc/udev/ualias.d/*.\n"
+"Without --name (or NAME), print the matching alias. With a name, append to ualias.d/local.\n"
 msgstr ""
 "వాడుక: ualias [ఎంపిక]... [సీరియల్ [పేరు]]\n"
-"/etc/udev/devices లో USB పరికర మారుపేరు వెతకండి లేదా జోడించండి.\n"
-"--name (లేదా పేరు) లేకుంటే సరిపోయే మారుపేరు ముద్రించండి. పేరు ఉంటే నమూనా జోడించండి.\n"
+"/etc/udev/ualias.d/* లో USB పరికర మారుపేరు వెతకండి లేదా జోడించండి.\n"
+"--name (లేదా పేరు) లేకుంటే సరిపోయే మారుపేరు ముద్రించండి. పేరు ఉంటే ualias.d/local కు జోడించండి.\n"
 
 #: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "దోషాలను నివేదించండి: <%s>\n"
 
-#: src/main.rs:74 src/main.rs:142
+#: src/main.rs:74 src/main.rs:146
 msgid "USB vendor id (hex)\n"
 msgstr "USB విక్రేత ID (hex)\n"
 
-#: src/main.rs:75 src/main.rs:153
+#: src/main.rs:75 src/main.rs:157
 msgid "USB product id (hex)\n"
 msgstr "USB ఉత్పత్తి ID (hex)\n"
 
-#: src/main.rs:76 src/main.rs:164
+#: src/main.rs:76 src/main.rs:168
 msgid "device serial / MAC\n"
 msgstr "పరికర సీరియల్ / MAC\n"
 
-#: src/main.rs:77 src/main.rs:175
+#: src/main.rs:77 src/main.rs:179
 msgid "alias name (append mode)\n"
 msgstr "మారుపేరు (జోడింపు రీతి)\n"
 
-#: src/main.rs:78 src/main.rs:186
+#: src/main.rs:78 src/main.rs:190
 msgid "uppercase the first letter of the name\n"
 msgstr "పేరు మొదటి అక్షరాన్ని పెద్దగా చేయి\n"
 
-#: src/main.rs:79 src/main.rs:197
+#: src/main.rs:79 src/main.rs:201
 msgid "display this help and exit\n"
 msgstr "ఈ సహాయం చూపి నిష్క్రమించు\n"
 
-#: src/main.rs:80 src/main.rs:207
+#: src/main.rs:80 src/main.rs:211
 msgid "output version information and exit\n"
 msgstr "వెర్షన్ సమాచారం చూపి నిష్క్రమించు\n"
 
@@ -84,19 +84,19 @@ msgstr "ఈ ప్రాజెక్ట్ నిర్లక్ష్య MIT-�
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "చట్టం అనుమతించిన మేరకు ఎలాంటి వారంటీ లేదు.\n"
 
-#: src/main.rs:215
+#: src/main.rs:219
 msgid "device serial / MAC"
 msgstr "పరికర సీరియల్ / MAC"
 
-#: src/main.rs:220
+#: src/main.rs:224
 msgid "alias name (append mode)"
 msgstr "మారుపేరు (జోడింపు రీతి)"
 
-#: src/main.rs:258
+#: src/main.rs:262
 #, c-format
 msgid "%s: missing vendor, product, serial, or name\n"
 msgstr "%s: విక్రేత, ఉత్పత్తి, సీరియల్ లేదా పేరు లేదు\n"
 
-#: src/main.rs:293
+#: src/main.rs:297
 msgid "no matching alias"
 msgstr "సరిపోయే మారుపేరు లేదు"
