@@ -1,0 +1,18 @@
+Source: ualias
+Section: utils
+Priority: optional
+Maintainer: Lenik <ualias@bodz.net>
+Build-Depends: debhelper-compat (= 13), meson, ninja-build, pkgconf, cargo, rustc, gettext, libgettextpo-dev, pkg-config, asciidoctor
+Standards-Version: 4.6.0
+Homepage: https://github.com/lenik/ualias
+Rules-Requires-Root: no
+
+Package: ualias
+Architecture: any
+Depends: 
+    ${shlibs:Depends}, 
+    ${misc:Depends}
+Description: Rust CLI project template with example app
+ ualias is a template repository for small Rust command-line utilities.
+ It ships the ualias example (Cargo + optional Meson for gettext, docs, and
+ packaging), and unit tests are run with `cargo test` (via `meson test`).

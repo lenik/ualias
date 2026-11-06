@@ -1,0 +1,24 @@
+[package]
+name = "ualias"
+version = "1.0.0"
+edition = "2021"
+description = "Example cat-like CLI for the ualias Rust project template"
+license = "AGPL-3.0"
+repository = "https://github.com/lenik/ualias"
+authors = ["Lenik <ualias@bodz.net>"]
+rust-version = "1.74"
+
+[lib]
+name = "ualias"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ualias"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+env_logger = { version = "0.11", default-features = false, features = ["color"] }
+gettext-rs = "0.7"
+log = "0.4"
+thiserror = "1.0"
