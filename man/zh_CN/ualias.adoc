@@ -1,0 +1,112 @@
+= ualias(1)
+Lenik <ualias@bodz.net>
+v{project-version}, {project-year}
+:doctype: manpage
+:manmanual: User Commands
+:mansource: ualias
+:man-linkstyle: blue R <>
+:nofooter:
+
+== Name
+
+ualias - 查找或追加 USB 设备别名
+
+== Synopsis
+
+*ualias* [_选项_]... [_序列号_ [_名称_]]
+
+== Description
+
+读取 */etc/udev/devices* 中的别名表（可用环境变量
+*UALIAS_DEVICES* 覆盖），打印匹配的别名，或在指定名称时追加一条规则。
+
+设备文件中每个非注释行包含四个字段：
+
+  VENDOR PRODUCT SERIAL NAME
+
+字段值为 *\** 时表示通配。按文件顺序尝试，首次匹配生效。因此通常先写具体序列号行，再写厂商/产品回落规则，例如 ESP32-S3 的 *303a 1001 \* s3g*。
+
+未指定 *--name*（或位置参数 _名称_）时，将匹配到的别名打印到标准输出。若无匹配，打印错误并以状态码 1 退出。
+
+指定名称时追加一条规则。省略的厂商、产品或序列号字段写为 *\**。
+
+== Options
+
+*-w, --vendor* _ID_::
+  USB 厂商 ID（通常为四位十六进制，不含 *0x* 前缀）。
+
+*-p, --product* _ID_::
+  USB 产品 ID（通常为四位十六进制，不含 *0x* 前缀）。
+
+*-s, --serial* _SERIAL_::
+  设备序列号或 MAC 风格标识。
+  也可作为第一个位置参数给出。
+
+*-n, --name* _NAME_::
+  别名。指定名称即进入追加模式。
+  也可作为第二个位置参数给出（需有位置序列号）。
+
+*-u, --ucfirst*::
+  将别名首字母大写（查找输出，或追加时写入的名称）。
+
+*-h, --help*::
+  打印用法摘要并成功退出。
+
+*--version*::
+  打印版本与许可证信息并成功退出。
+
+== Environment
+
+*UALIAS_DEVICES*::
+  设备表路径。默认：*/etc/udev/devices*。
+
+*UALIAS_LOCALEDIR*::
+  覆盖 gettext 区域目录。
+
+== Exit status
+
+*0*::
+  成功。
+
+*1*::
+  无匹配、缺少参数或 I/O 错误。
+
+*2*::
+  命令行选项无效。
+
+== Examples
+
+按序列号查找：
+
+  ualias 44:1B:F6:D7:92:5C
+
+按厂商/产品查找未知序列号的 ESP32-S3（回落到 *s3g*）：
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+追加序列号映射：
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+追加厂商/产品回落：
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  默认别名表。
+
+== Author
+
+由 {project-author} <{project-email}> 编写。
+
+== Copyright
+
+Copyright (C) {project-year}.
+License AGPL-3.0-or-later.
+这是自由软件：你可以在 GNU Affero General Public License 条款下修改并重新分发。
+在法律允许范围内，不提供任何担保。
+完整许可证文本见源码发行中的 LICENSE 文件，
+其中补充条款声明本项目反对 AI 剥削与 AI 霸权，
+并拒绝无脑 MIT 式许可证与政治幼稚的 BSD 式许可证。

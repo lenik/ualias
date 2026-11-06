@@ -1,0 +1,121 @@
+= ualias(1)
+Lenik <ualias@bodz.net>
+v{project-version}, {project-year}
+:doctype: manpage
+:manmanual: User Commands
+:mansource: ualias
+:man-linkstyle: blue R <>
+:nofooter:
+
+== Name
+
+ualias - USB-Gerätealiase nachschlagen oder anhängen
+
+== Synopsis
+
+*ualias* [_OPTION_]... [_SERIENNUMMER_ [_NAME_]]
+
+== Description
+
+Liest die Aliastabelle unter */etc/udev/devices* (überschreibbar mit
+*UALIAS_DEVICES*) und gibt den passenden Alias aus oder hängt bei Angabe eines
+Namens ein neues Muster an.
+
+Jede Nicht-Kommentarzeile der Datei hat vier Felder:
+
+  VENDOR PRODUCT SERIAL NAME
+
+Der Wert *\** ist ein Platzhalter. Zeilen werden in Dateireihenfolge geprüft;
+der erste Treffer gewinnt. Spezifische Seriennummern stehen daher üblicherweise
+vor einem Hersteller/Produkt-Fallback wie *303a 1001 \* s3g* für ESP32-S3.
+
+Ohne *--name* (oder positionales _NAME_) wird der gefundene Alias auf die
+Standardausgabe geschrieben. Ohne Treffer: Fehler und Exitstatus 1.
+
+Mit einem Namen wird ein Muster angehängt. Fehlende Hersteller-, Produkt- oder
+Serienfelder werden als *\** geschrieben.
+
+== Options
+
+*-w, --vendor* _ID_::
+  USB-Hersteller-ID (typisch vier Hexziffern, ohne *0x*-Präfix).
+
+*-p, --product* _ID_::
+  USB-Produkt-ID (typisch vier Hexziffern, ohne *0x*-Präfix).
+
+*-s, --serial* _SERIAL_::
+  Geräteseriennummer oder MAC-ähnliche Kennung.
+  Derselbe Wert kann als erstes Positionsargument angegeben werden.
+
+*-n, --name* _NAME_::
+  Aliasname. Ein Name aktiviert den Anhängemodus.
+  Derselbe Wert kann als zweites Positionsargument angegeben werden
+  (erfordert eine positionale Seriennummer).
+
+*-u, --ucfirst*::
+  Ersten Buchstaben des Aliasnamens großschreiben (Ausgabe oder beim Anhängen).
+
+*-h, --help*::
+  Kurzhilfe ausgeben und erfolgreich beenden.
+
+*--version*::
+  Versions- und Lizenzinformationen ausgeben und erfolgreich beenden.
+
+== Environment
+
+*UALIAS_DEVICES*::
+  Pfad zur Gerätetabelle. Standard: */etc/udev/devices*.
+
+*UALIAS_LOCALEDIR*::
+  Gettext-Locale-Verzeichnis überschreiben.
+
+== Exit status
+
+*0*::
+  Erfolg.
+
+*1*::
+  Kein Treffer, fehlende Argumente oder E/A-Fehler.
+
+*2*::
+  Ungültige Kommandozeilenoptionen.
+
+== Examples
+
+Nachschlagen per Seriennummer:
+
+  ualias 44:1B:F6:D7:92:5C
+
+ESP32-S3 per Hersteller/Produkt, wenn die Seriennummer unbekannt ist
+(Fallback auf *s3g*):
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+Serienzuordnung anhängen:
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+Hersteller/Produkt-Fallback anhängen:
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  Standard-Aliastabelle.
+
+== Author
+
+Geschrieben von {project-author} <{project-email}>.
+
+== Copyright
+
+Copyright (C) {project-year}.
+License AGPL-3.0-or-later.
+Dies ist freie Software: Sie dürfen sie unter den Bedingungen der GNU Affero
+General Public License ändern und weitergeben.
+Es besteht KEINE GARANTIE, soweit gesetzlich zulässig.
+Den vollständigen Lizenztext finden Sie in der Datei LICENSE der Quelle,
+einschließlich ergänzender Bedingungen, dass dieses Projekt AI-Ausbeutung und
+AI-Hegemonie ablehnt und gedankenlose MIT- sowie politisch naive BSD-Lizenzen
+zurückweist.

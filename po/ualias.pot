@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the ualias package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 09:03+0800\n"
+"Project-Id-Version: ualias 0.0.2\n"
+"Report-Msgid-Bugs-To: ualias@bodz.net\n"
+"POT-Creation-Date: 2026-11-06 14:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +17,84 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.rs:62
+#: src/main.rs:63
 msgid ""
-"Usage: ualias [OPTION]... [FILE]...\n"
-"Concatenate FILE(s) to standard output. With no FILE, or when FILE is -,\n"
-"read standard input.\n"
+"Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
+"Look up or append a USB device alias in /etc/udev/devices.\n"
+"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
 msgstr ""
 
-#: src/main.rs:67
+#: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr ""
 
-#: src/main.rs:73 src/main.rs:174
-msgid "repeat for more verbose loggings\n"
+#: src/main.rs:74 src/main.rs:142
+msgid "USB vendor id (hex)\n"
 msgstr ""
 
-#: src/main.rs:74 src/main.rs:185
-msgid "show less logging messages\n"
+#: src/main.rs:75 src/main.rs:153
+msgid "USB product id (hex)\n"
 msgstr ""
 
-#: src/main.rs:75 src/main.rs:197
+#: src/main.rs:76 src/main.rs:164
+msgid "device serial / MAC\n"
+msgstr ""
+
+#: src/main.rs:77 src/main.rs:175
+msgid "alias name (append mode)\n"
+msgstr ""
+
+#: src/main.rs:78 src/main.rs:186
+msgid "uppercase the first letter of the name\n"
+msgstr ""
+
+#: src/main.rs:79 src/main.rs:197
 msgid "display this help and exit\n"
 msgstr ""
 
-#: src/main.rs:76 src/main.rs:207
+#: src/main.rs:80 src/main.rs:207
 msgid "output version information and exit\n"
 msgstr ""
 
-#: src/main.rs:84
+#: src/main.rs:88
 #, c-format
 msgid "Copyright (C) %d %s\n"
 msgstr ""
 
-#: src/main.rs:88
-msgid ""
-"License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+#: src/main.rs:92
+msgid "License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
 msgstr ""
 
-#: src/main.rs:89
+#: src/main.rs:93
 msgid "This is free software: you are free to change and redistribute it.\n"
 msgstr ""
 
-#: src/main.rs:90
+#: src/main.rs:94
 msgid "This project opposes AI exploitation and AI hegemony.\n"
 msgstr ""
 
-#: src/main.rs:92
-msgid ""
-"This project rejects mindless MIT-style licensing and politically naive BSD-"
-"style licensing.\n"
+#: src/main.rs:96
+msgid "This project rejects mindless MIT-style licensing and politically naive BSD-style licensing.\n"
 msgstr ""
 
-#: src/main.rs:94
+#: src/main.rs:98
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr ""
 
-#: src/main.rs:154
-#, c-format
-msgid "%s: write error\n"
+#: src/main.rs:215
+msgid "device serial / MAC"
 msgstr ""
 
-#: src/main.rs:163
-msgid "hello, world!\n"
+#: src/main.rs:220
+msgid "alias name (append mode)"
+msgstr ""
+
+#: src/main.rs:258
+#, c-format
+msgid "%s: missing vendor, product, serial, or name\n"
+msgstr ""
+
+#: src/main.rs:293
+msgid "no matching alias"
 msgstr ""

@@ -98,6 +98,29 @@ custom_target(
     install_dir: mandir / 'man1',
 )
 
+# Whole-document translated man pages → $mandir/<locale>/man1/
+man_locales = ['ar', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'zh_CN']
+foreach loc : man_locales
+    custom_target(
+        'ualias-man-' + loc,
+        input: 'man' / loc / 'ualias.adoc',
+        output: loc + '/man1/ualias.1',
+        command: [
+            asciidoctor,
+            '-b', 'manpage',
+            '-a', 'project-version=' + meson.project_version(),
+            '-a', 'project-year=@0@'.format(project_year),
+            '-a', 'project-author=' + project_author,
+            '-a', 'project-email=' + project_email,
+            '-o', '@OUTPUT@',
+            '@INPUT@',
+        ],
+        build_by_default: true,
+        install: true,
+        install_dir: mandir,
+    )
+endforeach
+
 subdir('po')
 
 # look task: list what installed files looks like
@@ -113,33 +136,31 @@ run_target(
     ],
 )
 
+# Sync gettext catalogs (xgettext / msgmerge) via zfr.
+run_target(
+    'posync',
+    command: [
+        'bash',
+        meson.project_source_root() / 'scripts' / 'posync.sh',
+        meson.project_source_root(),
+        meson.project_build_root(),
+    ],
+)
+
 # Fast local debugging against the active installation prefix:
 # symlink installed paths to project/build outputs.
 run_target(
     'install-symlinks',
     command: [
         'bash',
-        '-euc', '''
-            prefix="@0@"
-            bindir="@1@"
-            datadir="@2@"
-            localedir="@3@"
-            mandir="@4@"
-
-            mkdir -p "$bindir" "$datadir/bash-completion/completions" "$localedir" "$mandir/man1"
-
-            sudo ln -sfn "@BUILD_ROOT@/ualias" "$bindir/ualias"
-            sudo ln -sfn "@BUILD_ROOT@/ualias.1" "$mandir/man1/ualias.1"
-            sudo ln -sfn "@SOURCE_ROOT@/ualias.bash" "$datadir/bash-completion/completions/ualias"
-
-            printf "Symlinks installed under %s\n" "$prefix"
-        '''.format(
-            get_option('prefix'),
-            bindir,
-            datadir,
-            localedir,
-            mandir,
-        ),
+        meson.project_source_root() / 'scripts' / 'install-symlinks.sh',
+        meson.project_source_root(),
+        meson.project_build_root(),
+        get_option('prefix'),
+        bindir,
+        datadir,
+        localedir,
+        mandir,
     ],
 )
 
@@ -147,32 +168,14 @@ run_target(
     'uninstall-symlinks',
     command: [
         'bash',
-        '-euc', '''
-            prefix="@0@"
-            bindir="@1@"
-            datadir="@2@"
-            localedir="@3@"
-            mandir="@4@"
-
-            for p in \
-                "$bindir/ualias" \
-                "$mandir/man1/ualias.1" \
-                "$datadir/bash-completion/completions/ualias"
-            do
-                if [ -L "$p" ]; then
-                    sudo rm -f "$p"
-                    printf "Removed %s\n" "$p"
-                else
-                    printf "Skipped (not a symlink): %s\n" "$p"
-                fi
-            done
-        '''.format(
-            get_option('prefix'),
-            bindir,
-            datadir,
-            localedir,
-            mandir,
-        ),
+        meson.project_source_root() / 'scripts' / 'uninstall-symlinks.sh',
+        meson.project_source_root(),
+        meson.project_build_root(),
+        get_option('prefix'),
+        bindir,
+        datadir,
+        localedir,
+        mandir,
     ],
 )
 

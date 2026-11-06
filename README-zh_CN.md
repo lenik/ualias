@@ -1,40 +1,40 @@
-本文件由模板生成。
-除项目名称和程序名称外，其余内容均为占位符。
-请根据当前项目的具体情况重写此文档。
-
 # ualias
 
-`ualias` 是一个以 **Rust（Cargo）** 为主、可选 **Meson** 的中小型命令行应用项目模板。  
-`ualias` 是此模板中的一个**示例应用**；同一仓库中可以继续添加更多应用。
+`ualias` 根据 `/etc/udev/devices` 中的表查找或追加 USB 设备别名。
 
-## 仓库结构
-
-- `src/` - `ualias` 库与 `ualias` 可执行文件代码
-- `build-aux/cargo-build.sh` - Meson 调用以执行 `cargo build --release`
-- `debian/` - Debian 打包元数据
-- `man/` - AsciiDoc man 页源文件（`man/*.adoc`）
-- `meson.build` - man、文档、gettext、`install-symlinks`、以及用 Meson 登记的 `cargo test`
-- `Cargo.toml` / `Cargo.lock` - 依赖与锁文件
-- `po/` - gettext 翻译
-
-## 示例应用：`ualias`
-
-`ualias` 是一个类似 `cat` 的工具：
+## 用法
 
 ```bash
-ualias [OPTION]... [FILE]...
+ualias [选项]... [序列号 [名称]]
 ```
 
-- 如果未提供 `FILE`，则从 `stdin` 读取。
-- 如果某个 `FILE` 为 `-`，则在该位置从 `stdin` 读取。
-- 输出写入 `stdout`。
+选项：
 
-支持的选项：
-
-- `-v`, `--verbose`
-- `-q`, `--quiet`
+- `-w`, `--vendor ID` — USB 厂商 ID（十六进制）
+- `-p`, `--product ID` — USB 产品 ID（十六进制）
+- `-s`, `--serial SERIAL` — 设备序列号 / MAC
+- `-n`, `--name NAME` — 别名（指定后进入追加模式）
+- `-u`, `--ucfirst` — 将别名首字母大写
 - `-h`, `--help`
 - `--version`
+
+未指定名称时，输出匹配到的别名（无匹配则退出码 `1`）。指定名称时追加一条
+规则；未给出的厂商/产品/序列号字段写为 `*`。
+
+规则按文件顺序匹配。示例：
+
+```text
+#VENDOR PRODUCT SERIAL NAME
+* * 44:1B:F6:D7:92:5C s3cam
+* * 10:20:BA:3D:30:28 s3tlcd3.49in
+* * 3C:DC:75:70:15:2C s3tlcd2.0in
+* * 44:1B:F6:D2:22:1F s3cam
+303a 1001 * s3g
+```
+
+ESP32-S3（`303a:1001`）若序列号未单独列出，会回落到 `s3g`。
+
+可用环境变量 `UALIAS_DEVICES` 覆盖表路径（便于测试）。
 
 ## 构建与测试
 
@@ -44,93 +44,44 @@ ualias [OPTION]... [FILE]...
 sudo apt install build-essential meson ninja-build pkgconf cargo rustup gettext asciidoctor
 ```
 
-（源码包构建依赖以 `debian/control` 为准。）
-
 ### 用 Cargo 构建
 
 ```bash
 cargo build --release
-# ./target/release/ualias
 ```
 
-### 用 Meson 配置并构建
-
-约定使用**绝对**构建目录 `/build`（若本机可写；否则可换成任意可写目录）：
+### 用 Meson 构建
 
 ```bash
 meson setup /build
 ninja -C /build
 ```
 
-`ninja` 会执行 `build-aux/cargo-build.sh`，在 `{{builddir}}/cargo-target` 下用 Cargo 完成构建。若需保留 `RUSTC_WRAPPER`（如 sccache），可设置 `UALIAS_CARGO_ENABLE_SCCACHE=1`；否则脚本默认会取消该变量。
-
 ### 运行测试
 
 ```bash
 cargo test
-# 或
 meson test -C /build
 ```
 
-`meson test` 在构建目录下为 `cargo test` 使用独立的 `target-dir`。
+## 国际化
 
-## i18n（gettext）
-
-`ualias` 使用 `po/` 下的 gettext 翻译文件（`*.po` 与生成的 `.mo` 文件）。
-
-Ualias 风格建议 `po/LINGUAS` 至少包含：**ar bn de es fr hi id it ja ko pt ru sv
-ta te th tr ur vi zh_CN zh_TW**（英文为 msgid 源语言；`zh-cn`/`zh-tw` 对应
-`zh_CN`/`zh_TW`）。
-
-- 运行时可用环境变量 `UALIAS_LOCALEDIR` 指定「localedir」根目录；未设置时程序会尝试 `build/po` 等开发路径，或回退到 `/usr/local/share/locale`。
-- 与常见 gettext 应用一样，从系统正确安装时也会从系统 locale 目录加载翻译。`ninja install-symlinks` 仅做二进制、man 与 bash 补全的符号链接，不负责安装 `.mo` 文件；完整安装请用 `meson install` 或发行版包。`POTFILES` 现为 `src/lib.rs`、`src/main.rs`。
-
-### 同步翻译词条
-
-使用 `posync` 从当前源码字符串同步词条：
+翻译位于 `po/`。运行时可设 `UALIAS_LOCALEDIR`。
 
 ```bash
 ninja -C /build posync
+LANGUAGE=zh_CN /path/to/ualias -h
 ```
 
-`posync` 会：
-
-- 为 `po/LINGUAS` 中每种语言补齐缺失消息
-- 移除源码中已不再使用的废弃消息
-
-### 构建翻译文件
-
-```bash
-ninja -C /build
-```
-
-### 快速测试语言
-
-建议优先使用 `LANGUAGE=<lang>`，在开发环境中选择更稳定：
-
-```bash
-LANGUAGE=ja /build/ualias -h
-LANGUAGE=zh_CN /build/ualias -h
-```
-
-`LANG=<lang>.<encoding>` 是否生效取决于系统是否已生成对应 locale。
-
-## 安装 / 符号链接辅助命令
-
-常规安装：
+## 安装
 
 ```bash
 meson install -C /build
-```
-
-调试符号链接工作流（在已配置的安装前缀下）：
-
-```bash
+# 或
 ninja -C /build install-symlinks
-ninja -C /build uninstall-symlinks
 ```
 
-## Debian 打包
+## Debian 包
 
 ```bash
 dpkg-buildpackage -us -uc
@@ -140,6 +91,6 @@ dpkg-buildpackage -us -uc
 
 Copyright (C) 2026 Lenik <ualias@bodz.net>
 
-采用 **AGPL-3.0-or-later** 许可。  
-本项目明确反对 AI 剥削与 AI 霸权，反对无脑 MIT 式许可证和政治愚蠢的 BSD 式许可证。  
-完整文本及项目补充条款见 `LICENSE`。
+以 **AGPL-3.0-or-later** 许可发布。
+本项目明确反对 AI 剥削与 AI 霸权，并拒绝无脑 MIT 式许可证与政治幼稚的 BSD
+式许可证。完整文本与补充条款见 `LICENSE`。

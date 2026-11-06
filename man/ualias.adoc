@@ -9,31 +9,52 @@ v{project-version}, {project-year}
 
 == Name
 
-ualias - concatenate files to standard output
+ualias - look up or append USB device aliases
 
 == Synopsis
 
-*ualias* [_OPTION_]... [_FILE_]...
+*ualias* [_OPTION_]... [_SERIAL_ [_NAME_]]
 
 == Description
 
-Copy each _FILE_ to standard output in order.
-If _FILE_ is a single dash (*-*), read standard input at that position.
-If no _FILE_ is given, read standard input once.
+Read the alias table at */etc/udev/devices* (override with the
+*UALIAS_DEVICES* environment variable) and either print the matching alias
+name, or append a new pattern when a name is given.
 
-*ualias* is similar in spirit to *cat*(1): it writes the concatenation of
-inputs to standard output.
+Each non-comment line in the devices file has four fields:
+
+  VENDOR PRODUCT SERIAL NAME
+
+A field value of *\** is a wildcard. Lines are tried in file order; the first
+match wins. Specific serial rows are therefore usually listed before a
+vendor/product fallback such as *303a 1001 \* s3g* for ESP32-S3 boards.
+
+Without *--name* (or positional _NAME_), print the matched alias to standard
+output. If nothing matches, print an error and exit with status 1.
+
+With a name, append a new pattern. Omitted vendor, product, or serial fields
+are written as *\**.
 
 == Options
 
-*-v, --verbose*::
-  Print each file name (or ``standard input`` for *-*) to standard error
-  before copying that input.
-  Repeat for more verbose logging.
+*-w, --vendor* _ID_::
+  USB vendor id (typically four hex digits, without a *0x* prefix).
 
-*-q, --quiet*::
-  Suppress messages that would be printed by *--verbose*.
-  If both *--verbose* and *--quiet* are given, *--quiet* wins.
+*-p, --product* _ID_::
+  USB product id (typically four hex digits, without a *0x* prefix).
+
+*-s, --serial* _SERIAL_::
+  Device serial number or MAC-style identifier.
+  The same value may be given as the first positional argument.
+
+*-n, --name* _NAME_::
+  Alias name. Selecting a name enables append mode.
+  The same value may be given as the second positional argument
+  (requires a positional serial).
+
+*-u, --ucfirst*::
+  Uppercase the first letter of the alias name (on lookup output, or on the
+  name written when appending).
 
 *-h, --help*::
   Print a usage summary and exit successfully.
@@ -41,13 +62,48 @@ inputs to standard output.
 *--version*::
   Print version and license information and exit successfully.
 
+== Environment
+
+*UALIAS_DEVICES*::
+  Path to the devices table. Default: */etc/udev/devices*.
+
+*UALIAS_LOCALEDIR*::
+  Override the gettext locale directory.
+
 == Exit status
 
 *0*::
   Success.
 
 *1*::
-  An error occurred (invalid options, unreadable file, or I/O error).
+  No match, missing arguments, or I/O error.
+
+*2*::
+  Invalid command-line options.
+
+== Examples
+
+Look up by serial:
+
+  ualias 44:1B:F6:D7:92:5C
+
+Look up an ESP32-S3 board by vendor/product when the serial is unknown to the
+table (falls through to *s3g*):
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+Append a serial mapping:
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+Append a vendor/product fallback:
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  Default alias table.
 
 == Author
 

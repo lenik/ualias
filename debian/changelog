@@ -1,3 +1,14 @@
+ualias (0.0.2) unstable; urgency=medium
+
+  * Implement USB device alias lookup/append against /etc/udev/devices.
+  * Support vendor/product/serial wildcards with first-match order
+    (ESP32-S3 fallback).
+  * Add -u/--ucfirst for uppercasing the alias name.
+  * Satisfy zfr lint: L1 man locales, posync/symlink scripts, CI
+    helpers, rpm %files.
+
+ -- Lenik (谢继雷) <lenik@bodz.net>  Fri, 06 Nov 2026 14:40:30 +0800
+
 ualias (0.0.1) unstable; urgency=medium
 
   * Initial release

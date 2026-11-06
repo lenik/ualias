@@ -60,6 +60,10 @@ dist:
 		echo "zfr dist: zfr not found on PATH" >&2; \
 		exit 1; \
 	fi
+	@for p in *.patch; do \
+		[ -f "$$p" ] || continue; \
+		cp -a "$$p" "$(TOPDIR)/SOURCES/"; \
+	done
 
 # Freeze versions into the spec so SRPM rebuilds do not fall back to 0.0.0.
 spec: dist $(NAME).spec
@@ -87,6 +91,10 @@ rpm: spec
 clean:
 	rm -f $(TOPDIR)/SPECS/$(NAME).spec
 	rm -f $(TOPDIR)/SOURCES/$(NAME)-*.tar.*
+	@for p in *.patch; do \
+		[ -f "$$p" ] || continue; \
+		rm -f "$(TOPDIR)/SOURCES/$$p"; \
+	done
 	rm -f $(TOPDIR)/SRPMS/$(NAME)-*.src.rpm
 	rm -f $(TOPDIR)/RPMS/*/$(NAME)-*.rpm
 	rm -rf $(TOPDIR)/BUILD/$(NAME)-*

@@ -1,0 +1,120 @@
+= ualias(1)
+Lenik <ualias@bodz.net>
+v{project-version}, {project-year}
+:doctype: manpage
+:manmanual: User Commands
+:mansource: ualias
+:man-linkstyle: blue R <>
+:nofooter:
+
+== Name
+
+ualias - consultar o añadir alias de dispositivos USB
+
+== Synopsis
+
+*ualias* [_OPCIÓN_]... [_SERIAL_ [_NOMBRE_]]
+
+== Description
+
+Lee la tabla de alias en */etc/udev/devices* (se puede anular con
+*UALIAS_DEVICES*) e imprime el alias coincidente, o añade un patrón cuando se
+indica un nombre.
+
+Cada línea no comentada del archivo tiene cuatro campos:
+
+  VENDOR PRODUCT SERIAL NAME
+
+El valor *\** es un comodín. Las líneas se prueban en orden de archivo; gana la
+primera coincidencia. Por eso los números de serie concretos suelen ir antes de
+un respaldo de fabricante/producto como *303a 1001 \* s3g* para ESP32-S3.
+
+Sin *--name* (o _NOMBRE_ posicional), el alias hallado se escribe en la salida
+estándar. Sin coincidencia: error y código de salida 1.
+
+Con un nombre, se añade un patrón. Los campos de fabricante, producto o serie
+omitidos se escriben como *\**.
+
+== Options
+
+*-w, --vendor* _ID_::
+  ID de proveedor USB (normalmente cuatro dígitos hexadecimales, sin *0x*).
+
+*-p, --product* _ID_::
+  ID de producto USB (normalmente cuatro dígitos hexadecimales, sin *0x*).
+
+*-s, --serial* _SERIAL_::
+  Número de serie o identificador tipo MAC.
+  El mismo valor puede ser el primer argumento posicional.
+
+*-n, --name* _NAME_::
+  Nombre de alias. Un nombre activa el modo de añadir.
+  El mismo valor puede ser el segundo argumento posicional
+  (requiere un serial posicional).
+
+*-u, --ucfirst*::
+  Poner en mayúscula la primera letra del nombre (en la salida o al añadir).
+
+*-h, --help*::
+  Mostrar un resumen de uso y salir con éxito.
+
+*--version*::
+  Mostrar versión y licencia y salir con éxito.
+
+== Environment
+
+*UALIAS_DEVICES*::
+  Ruta de la tabla. Predeterminado: */etc/udev/devices*.
+
+*UALIAS_LOCALEDIR*::
+  Anular el directorio de locales gettext.
+
+== Exit status
+
+*0*::
+  Éxito.
+
+*1*::
+  Sin coincidencia, argumentos faltantes o error de E/S.
+
+*2*::
+  Opciones de línea de comandos no válidas.
+
+== Examples
+
+Buscar por número de serie:
+
+  ualias 44:1B:F6:D7:92:5C
+
+ESP32-S3 por proveedor/producto si el serial es desconocido (cae en *s3g*):
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+Añadir un mapeo de serial:
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+Añadir un respaldo de proveedor/producto:
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  Tabla de alias predeterminada.
+
+== Author
+
+Escrito por {project-author} <{project-email}>.
+
+== Copyright
+
+Copyright (C) {project-year}.
+License AGPL-3.0-or-later.
+Este es software libre: puede modificarlo y redistribuirlo bajo los términos
+de la GNU Affero General Public License.
+NO HAY GARANTÍA, en la medida permitida por la ley.
+Consulte el archivo LICENSE de la distribución fuente para el texto completo,
+incluidos los términos adicionales que declaran que este proyecto se opone a la
+explotación y la hegemonía de la IA, y rechaza las licencias estilo MIT sin
+criterio y estilo BSD políticamente ingenuas.

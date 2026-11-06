@@ -1,77 +1,93 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ualias\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 09:03+0800\n"
+"Report-Msgid-Bugs-To: ualias@bodz.net\n"
+"POT-Creation-Date: 2026-11-06 14:45+0800\n"
 "Language: zh_CN\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.rs:62
+#: src/main.rs:63
 msgid ""
-"Usage: ualias [OPTION]... [FILE]...\n"
-"Concatenate FILE(s) to standard output. With no FILE, or when FILE is -,\n"
-"read standard input.\n"
+"Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
+"Look up or append a USB device alias in /etc/udev/devices.\n"
+"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
 msgstr ""
-"用法：ualias [选项]... [文件]...\n"
-"将文件内容连接并输出到标准输出。若未提供文件，或文件为 -，\n"
-"则从标准输入读取。\n"
+"用法：ualias [选项]... [序列号 [名称]]\n"
+"在 /etc/udev/devices 中查找或追加 USB 设备别名。\n"
+"未指定 --name（或 NAME）时打印匹配的别名；指定名称则追加一条规则。\n"
 
-#: src/main.rs:67
+#: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
 msgstr "报告问题到：<%s>\n"
 
-#: src/main.rs:73 src/main.rs:174
-msgid "repeat for more verbose loggings\n"
-msgstr "重复使用以输出更多详细日志\n"
+#: src/main.rs:74 src/main.rs:142
+msgid "USB vendor id (hex)\n"
+msgstr "USB 厂商 ID（十六进制）\n"
 
-#: src/main.rs:74 src/main.rs:185
-msgid "show less logging messages\n"
-msgstr "显示更少的日志消息\n"
+#: src/main.rs:75 src/main.rs:153
+msgid "USB product id (hex)\n"
+msgstr "USB 产品 ID（十六进制）\n"
 
-#: src/main.rs:75 src/main.rs:197
+#: src/main.rs:76 src/main.rs:164
+msgid "device serial / MAC\n"
+msgstr "设备序列号 / MAC\n"
+
+#: src/main.rs:77 src/main.rs:175
+msgid "alias name (append mode)\n"
+msgstr "别名（追加模式）\n"
+
+#: src/main.rs:78 src/main.rs:186
+msgid "uppercase the first letter of the name\n"
+msgstr "将别名的首字母大写\n"
+
+#: src/main.rs:79 src/main.rs:197
 msgid "display this help and exit\n"
 msgstr "显示此帮助并退出\n"
 
-#: src/main.rs:76 src/main.rs:207
+#: src/main.rs:80 src/main.rs:207
 msgid "output version information and exit\n"
 msgstr "输出版本信息并退出\n"
 
-#: src/main.rs:84
+#: src/main.rs:88
 #, c-format
 msgid "Copyright (C) %d %s\n"
 msgstr "版权所有 (C) %d %s\n"
 
-#: src/main.rs:88
-msgid ""
-"License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
-msgstr ""
-"许可证 AGPL-3.0-or-later：<https://www.gnu.org/licenses/agpl-3.0.html>\n"
+#: src/main.rs:92
+msgid "License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+msgstr "许可证 AGPL-3.0-or-later：<https://www.gnu.org/licenses/agpl-3.0.html>\n"
 
-#: src/main.rs:89
+#: src/main.rs:93
 msgid "This is free software: you are free to change and redistribute it.\n"
 msgstr "这是自由软件：你可以自由修改并重新分发。\n"
 
-#: src/main.rs:90
+#: src/main.rs:94
 msgid "This project opposes AI exploitation and AI hegemony.\n"
 msgstr "本项目反对 AI 剥削与 AI 霸权。\n"
 
-#: src/main.rs:92
-msgid ""
-"This project rejects mindless MIT-style licensing and politically naive BSD-"
-"style licensing.\n"
+#: src/main.rs:96
+msgid "This project rejects mindless MIT-style licensing and politically naive BSD-style licensing.\n"
 msgstr "本项目反对无脑 MIT 式许可证和政治愚蠢 BSD 式许可证。\n"
 
-#: src/main.rs:94
+#: src/main.rs:98
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr "在法律允许范围内，不提供任何担保。\n"
 
-#: src/main.rs:154
-#, c-format
-msgid "%s: write error\n"
-msgstr "%s: 写入错误\n"
+#: src/main.rs:215
+msgid "device serial / MAC"
+msgstr "设备序列号 / MAC"
 
-#: src/main.rs:163
-msgid "hello, world!\n"
-msgstr "你好，世界！\n"
+#: src/main.rs:220
+msgid "alias name (append mode)"
+msgstr "别名（追加模式）"
+
+#: src/main.rs:258
+#, c-format
+msgid "%s: missing vendor, product, serial, or name\n"
+msgstr "%s: 缺少厂商、产品、序列号或名称\n"
+
+#: src/main.rs:293
+msgid "no matching alias"
+msgstr "无匹配的别名"

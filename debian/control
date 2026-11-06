@@ -12,7 +12,8 @@ Architecture: any
 Depends: 
     ${shlibs:Depends}, 
     ${misc:Depends}
-Description: Rust CLI project template with example app
- ualias is a template repository for small Rust command-line utilities.
- It ships the ualias example (Cargo + optional Meson for gettext, docs, and
- packaging), and unit tests are run with `cargo test` (via `meson test`).
+Description: look up or append USB device aliases
+ ualias reads /etc/udev/devices and prints the matching USB device alias, or
+ appends a new vendor/product/serial pattern when a name is given. Patterns
+ are matched in file order, so specific serials can fall back to a
+ vendor/product wildcard (for example ESP32-S3 303a:1001 → s3g).

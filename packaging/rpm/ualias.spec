@@ -7,7 +7,7 @@
 Name:           ualias
 Version:        %{version}
 Release:        1%{?dist}
-Summary:        Rust CLI project template with example app
+Summary:        look up or append USB device aliases
 
 License:        AGPL-3.0-or-later
 URL:            https://github.com/lenik/ualias
@@ -25,9 +25,10 @@ BuildRequires:  pkg-config
 BuildRequires:  asciidoctor
 
 %description
-ualias is a template repository for small Rust command-line utilities.
-It ships the ualias example (Cargo + optional Meson for gettext, docs, and
-packaging), and unit tests are run with `cargo test` (via `meson test`).
+ualias reads /etc/udev/devices and prints the matching USB device alias, or
+appends a new vendor/product/serial pattern when a name is given. Patterns
+are matched in file order so specific serials can fall back to a
+vendor/product wildcard.
 
 %prep
 %setup -q -n %{name}-%{srcversion}
@@ -50,9 +51,9 @@ meson install -C build --destdir=%{buildroot}
 %{_bindir}/ualias
 %{_datadir}/bash-completion/completions/ualias
 %{_mandir}/man1/ualias.1*
-%{_datadir}/doc/%{name}/
 %{_datadir}/locale/*/LC_MESSAGES/ualias.mo
-
+%{_mandir}/*/man1/ualias.1*
+%{_datadir}/doc/ualias/
 %changelog
 * Thu Aug 20 2026 Lenik <ualias@bodz.net>
 - Align spec with debian/control (Meson, AGPL-3.0-or-later).

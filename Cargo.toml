@@ -1,8 +1,8 @@
 [package]
 name = "ualias"
-version = "1.0.0"
+version = "0.0.2"
 edition = "2021"
-description = "Example cat-like CLI for the ualias Rust project template"
+description = "Look up or append USB device aliases from /etc/udev/devices"
 license = "AGPL-3.0"
 repository = "https://github.com/lenik/ualias"
 authors = ["Lenik <ualias@bodz.net>"]

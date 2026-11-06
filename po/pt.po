@@ -6,78 +6,98 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 09:03+0800\n"
+"Report-Msgid-Bugs-To: ualias@bodz.net\n"
+"POT-Creation-Date: 2026-11-06 14:45+0800\n"
 "PO-Revision-Date: 2026-08-20 09:03+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.rs:62
+#: src/main.rs:63
 msgid ""
-"Usage: ualias [OPTION]... [FILE]...\n"
-"Concatenate FILE(s) to standard output. With no FILE, or when FILE is -,\n"
-"read standard input.\n"
+"Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
+"Look up or append a USB device alias in /etc/udev/devices.\n"
+"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
 msgstr ""
+"Uso: ualias [OPÇÃO]... [SERIAL [NOME]]\n"
+"Consultar ou acrescentar um alias de dispositivo USB em /etc/udev/devices.\n"
+"Sem --name (ou NOME), imprime o alias correspondente. Com um nome, acrescenta um padrão.\n"
 
-#: src/main.rs:67
+#: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
-msgstr ""
+msgstr "Reportar erros para: <%s>\n"
 
-#: src/main.rs:73 src/main.rs:174
-msgid "repeat for more verbose loggings\n"
-msgstr ""
+#: src/main.rs:74 src/main.rs:142
+msgid "USB vendor id (hex)\n"
+msgstr "ID de fornecedor USB (hex)\n"
 
-#: src/main.rs:74 src/main.rs:185
-msgid "show less logging messages\n"
-msgstr ""
+#: src/main.rs:75 src/main.rs:153
+msgid "USB product id (hex)\n"
+msgstr "ID de produto USB (hex)\n"
 
-#: src/main.rs:75 src/main.rs:197
+#: src/main.rs:76 src/main.rs:164
+msgid "device serial / MAC\n"
+msgstr "número de série / MAC do dispositivo\n"
+
+#: src/main.rs:77 src/main.rs:175
+msgid "alias name (append mode)\n"
+msgstr "nome do alias (modo acrescentar)\n"
+
+#: src/main.rs:78 src/main.rs:186
+msgid "uppercase the first letter of the name\n"
+msgstr "colocar em maiúscula a primeira letra do nome\n"
+
+#: src/main.rs:79 src/main.rs:197
 msgid "display this help and exit\n"
-msgstr ""
+msgstr "mostrar esta ajuda e sair\n"
 
-#: src/main.rs:76 src/main.rs:207
+#: src/main.rs:80 src/main.rs:207
 msgid "output version information and exit\n"
-msgstr ""
-
-#: src/main.rs:84
-#, c-format
-msgid "Copyright (C) %d %s\n"
-msgstr ""
+msgstr "mostrar informação de versão e sair\n"
 
 #: src/main.rs:88
-msgid ""
-"License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
-msgstr ""
-
-#: src/main.rs:89
-msgid "This is free software: you are free to change and redistribute it.\n"
-msgstr ""
-
-#: src/main.rs:90
-msgid "This project opposes AI exploitation and AI hegemony.\n"
-msgstr ""
+#, c-format
+msgid "Copyright (C) %d %s\n"
+msgstr "Direitos autorais (C) %d %s\n"
 
 #: src/main.rs:92
-msgid ""
-"This project rejects mindless MIT-style licensing and politically naive BSD-"
-"style licensing.\n"
-msgstr ""
+msgid "License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+msgstr "Licença AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+
+#: src/main.rs:93
+msgid "This is free software: you are free to change and redistribute it.\n"
+msgstr "Este é software livre: você pode alterá-lo e redistribuí-lo.\n"
 
 #: src/main.rs:94
+msgid "This project opposes AI exploitation and AI hegemony.\n"
+msgstr "Este projeto opõe-se à exploração e à hegemonia da IA.\n"
+
+#: src/main.rs:96
+msgid "This project rejects mindless MIT-style licensing and politically naive BSD-style licensing.\n"
+msgstr "Este projeto rejeita licenças estilo MIT sem critério e estilo BSD politicamente ingênuas.\n"
+
+#: src/main.rs:98
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
-msgstr ""
+msgstr "NÃO HÁ GARANTIA, na medida permitida por lei.\n"
 
-#: src/main.rs:154
+#: src/main.rs:215
+msgid "device serial / MAC"
+msgstr "número de série / MAC do dispositivo"
+
+#: src/main.rs:220
+msgid "alias name (append mode)"
+msgstr "nome do alias (modo acrescentar)"
+
+#: src/main.rs:258
 #, c-format
-msgid "%s: write error\n"
-msgstr ""
+msgid "%s: missing vendor, product, serial, or name\n"
+msgstr "%s: falta fornecedor, produto, série ou nome\n"
 
-#: src/main.rs:163
-msgid "hello, world!\n"
-msgstr ""
+#: src/main.rs:293
+msgid "no matching alias"
+msgstr "nenhum alias correspondente"

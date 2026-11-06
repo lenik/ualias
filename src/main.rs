@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 use std::ffi::OsStr;
-use std::fs::File;
-use std::io;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process;
 
 use clap::Arg;
@@ -11,7 +9,10 @@ use clap::ArgAction;
 use clap::Command;
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, gettext, setlocale, textdomain, LocaleCategory};
 
-use ualias::{copy_stream, UaliasError};
+use ualias::{
+    append_pattern, load_devices, lookup_name, pattern_for_append, ucfirst, DevicePattern,
+    UaliasError, DEFAULT_DEVICES_PATH,
+};
 
 const TEXT_DOMAIN: &str = "ualias";
 const PROJECT_AUTHOR: &str = "Lenik";
@@ -59,9 +60,9 @@ fn c_format_replace(template: &str, pairs: &[(&str, &str)]) -> String {
 
 fn usage() {
     let msg = gettext(
-        "Usage: ualias [OPTION]... [FILE]...\n\
-Concatenate FILE(s) to standard output. With no FILE, or when FILE is -,\n\
-read standard input.\n",
+        "Usage: ualias [OPTION]... [SERIAL [NAME]]\n\
+Look up or append a USB device alias in /etc/udev/devices.\n\
+Without --name (or NAME), print the matching alias. With a name, append a pattern.\n",
     );
     let bugs = c_format_replace(
         &gettext("Report bugs to: <%s>\n"),
@@ -70,8 +71,11 @@ read standard input.\n",
     eprintln!();
     eprintln!("{msg}");
     eprintln!();
-    eprintln!("  -v, --verbose      {}", gettext("repeat for more verbose loggings\n").trim_end());
-    eprintln!("  -q, --quiet        {}", gettext("show less logging messages\n").trim_end());
+    eprintln!("  -w, --vendor ID    {}", gettext("USB vendor id (hex)\n").trim_end());
+    eprintln!("  -p, --product ID   {}", gettext("USB product id (hex)\n").trim_end());
+    eprintln!("  -s, --serial SER   {}", gettext("device serial / MAC\n").trim_end());
+    eprintln!("  -n, --name NAME    {}", gettext("alias name (append mode)\n").trim_end());
+    eprintln!("  -u, --ucfirst      {}", gettext("uppercase the first letter of the name\n").trim_end());
     eprintln!("  -h, --help         {}", gettext("display this help and exit\n").trim_end());
     eprintln!("      --version      {}", gettext("output version information and exit\n").trim_end());
     eprintln!();
@@ -94,31 +98,11 @@ fn print_version() {
     print!("{}", gettext("There is NO WARRANTY, to the extent permitted by law.\n"));
 }
 
-fn init_env_logger(verbose: u8, quiet: bool) {
-    if quiet {
-        let _ = env_logger::Builder::new()
-            .filter_level(log::LevelFilter::Error)
-            .format_timestamp(None)
-            .try_init();
-    } else {
-        let level = match verbose {
-            0 => log::LevelFilter::Info,
-            1 => log::LevelFilter::Debug,
-            _ => log::LevelFilter::Trace,
-        };
-        let _ = env_logger::Builder::new()
-            .filter_level(level)
-            .format_timestamp(None)
-            .try_init();
-    }
-}
-
 fn self_exe() -> String {
     std::env::args()
         .next()
         .as_ref()
         .map(|s| {
-            use std::path::Path;
             let p = Path::new(s);
             p.file_name()
                 .map(OsStr::to_string_lossy)
@@ -128,65 +112,81 @@ fn self_exe() -> String {
         .unwrap_or_else(|| "ualias".to_string())
 }
 
-fn copy_stdin(prog: &str) -> Result<(), UaliasError> {
-    let mut stdin = io::stdin();
-    let mut out = io::stdout();
-    if let Err(e) = copy_stream(&mut stdin, &mut out) {
-        eprintln!("{prog}: stdin: {e}");
-        return Err(e);
+fn devices_path() -> PathBuf {
+    if let Ok(s) = std::env::var("UALIAS_DEVICES") {
+        return PathBuf::from(s);
     }
-    Ok(())
+    PathBuf::from(DEFAULT_DEVICES_PATH)
 }
 
-/// Like the C `copy_file`: `fopen` errors print `"%s: %s" prog path`; `copy_stream` uses `"%s: write
-/// error"`.
-fn copy_path_to_stdout(prog: &str, path: &str) -> Result<(), UaliasError> {
-    let p = Path::new(path);
-    let mut f = match File::open(p) {
-        Ok(f) => f,
-        Err(e) => {
-            eprintln!("{prog}: {path}: {e}");
-            return Err(e.into());
-        }
-    };
-    let mut out = io::stdout().lock();
-    if let Err(e) = copy_stream(&mut f, &mut out) {
-        eprint!("{}", c_format_replace(&gettext("%s: write error\n"), &[("%s", prog)]));
-        return Err(e);
+fn maybe_ucfirst(name: &str, enabled: bool) -> String {
+    if enabled {
+        ucfirst(name)
+    } else {
+        name.to_string()
     }
-    Ok(())
 }
 
 fn run() -> i32 {
     init_gettext();
-    println!("TEXT_DOMAIN={TEXT_DOMAIN}.");
-    print!("{}", gettext("hello, world!\n"));
 
     let cmd = Command::new("ualias")
         .disable_version_flag(true)
         .disable_help_flag(true)
         .arg(
-            Arg::new("verbose")
-                .short('v')
-                .long("verbose")
-                .action(ArgAction::Count)
+            Arg::new("vendor")
+                .short('w')
+                .long("vendor")
+                .value_name("ID")
                 .help(
-                    gettext("repeat for more verbose loggings\n")
+                    gettext("USB vendor id (hex)\n")
                         .trim_end_matches('\n')
                         .to_string(),
                 ),
         )
         .arg(
-            Arg::new("quiet")
-                .short('q')
-                .long("quiet")
-                .action(ArgAction::SetTrue)
+            Arg::new("product")
+                .short('p')
+                .long("product")
+                .value_name("ID")
                 .help(
-                    gettext("show less logging messages\n")
+                    gettext("USB product id (hex)\n")
                         .trim_end_matches('\n')
                         .to_string(),
-                )
-                .overrides_with("verbose"),
+                ),
+        )
+        .arg(
+            Arg::new("serial")
+                .short('s')
+                .long("serial")
+                .value_name("SERIAL")
+                .help(
+                    gettext("device serial / MAC\n")
+                        .trim_end_matches('\n')
+                        .to_string(),
+                ),
+        )
+        .arg(
+            Arg::new("name")
+                .short('n')
+                .long("name")
+                .value_name("NAME")
+                .help(
+                    gettext("alias name (append mode)\n")
+                        .trim_end_matches('\n')
+                        .to_string(),
+                ),
+        )
+        .arg(
+            Arg::new("ucfirst")
+                .short('u')
+                .long("ucfirst")
+                .action(ArgAction::SetTrue)
+                .help(
+                    gettext("uppercase the first letter of the name\n")
+                        .trim_end_matches('\n')
+                        .to_string(),
+                ),
         )
         .arg(
             Arg::new("help")
@@ -210,11 +210,15 @@ fn run() -> i32 {
                 ),
         )
         .arg(
-            Arg::new("files")
-                .value_name("FILE")
-                .num_args(0..)
-                .action(ArgAction::Append)
-                .allow_hyphen_values(true),
+            Arg::new("serial_pos")
+                .value_name("SERIAL")
+                .help(gettext("device serial / MAC").to_string()),
+        )
+        .arg(
+            Arg::new("name_pos")
+                .value_name("NAME")
+                .help(gettext("alias name (append mode)").to_string())
+                .requires("serial_pos"),
         );
     let m = match cmd.try_get_matches() {
         Ok(m) => m,
@@ -231,45 +235,69 @@ fn run() -> i32 {
         usage();
         return 0;
     }
-    let verbose = m.get_count("verbose");
-    let quiet = m.get_flag("quiet");
-    init_env_logger(verbose, quiet);
 
     let exe = self_exe();
-    if verbose > 0 {
-        if quiet {
-            log::warn!("{exe}: -q overrides -v: quiet logging is active");
-        } else {
-            log::info!("{exe}: verbose mode enabled");
-        }
+    let do_ucfirst = m.get_flag("ucfirst");
+
+    let vendor = m.get_one::<String>("vendor").map(String::as_str);
+    let product = m.get_one::<String>("product").map(String::as_str);
+
+    let serial = m
+        .get_one::<String>("serial")
+        .or_else(|| m.get_one::<String>("serial_pos"))
+        .map(String::as_str);
+    let name = m
+        .get_one::<String>("name")
+        .or_else(|| m.get_one::<String>("name_pos"))
+        .map(String::as_str);
+
+    if vendor.is_none() && product.is_none() && serial.is_none() && name.is_none() {
+        eprintln!(
+            "{}",
+            c_format_replace(
+                &gettext("%s: missing vendor, product, serial, or name\n"),
+                &[("%s", &exe)],
+            )
+            .trim_end()
+        );
+        usage();
+        return 1;
     }
 
-    let file_args: Vec<String> = m
-        .get_many::<String>("files")
-        .map(|it| it.cloned().collect())
-        .unwrap_or_default();
-    if file_args.is_empty() {
-        log::info!("{exe}: reading from standard input");
-        if copy_stdin(&exe).is_err() {
+    let path = devices_path();
+
+    if let Some(name) = name {
+        let name = maybe_ucfirst(name, do_ucfirst);
+        let pat: DevicePattern = pattern_for_append(vendor, product, serial, &name);
+        if let Err(e) = append_pattern(&path, &pat) {
+            eprintln!("{exe}: {}: {e}", path.display());
             return 1;
         }
-        log::info!("{exe}: done");
         return 0;
     }
-    for path in &file_args {
-        if path == "-" {
-            log::info!("{exe}: copying from standard input");
-            if copy_stdin(&exe).is_err() {
-                return 1;
-            }
-        } else if copy_path_to_stdout(&exe, path).is_err() {
+
+    // Lookup mode
+    let patterns = match load_devices(&path) {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("{exe}: {}: {e}", path.display());
             return 1;
-        } else {
-            log::info!("{exe}: copied {path}");
+        }
+    };
+    match lookup_name(&patterns, vendor, product, serial) {
+        Ok(n) => {
+            println!("{}", maybe_ucfirst(&n, do_ucfirst));
+            0
+        }
+        Err(UaliasError::NoMatch) => {
+            eprintln!("{}", gettext("no matching alias").trim_end());
+            1
+        }
+        Err(e) => {
+            eprintln!("{exe}: {e}");
+            1
         }
     }
-    log::info!("{exe}: done");
-    0
 }
 
 fn main() {

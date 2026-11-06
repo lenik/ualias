@@ -6,77 +6,97 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 09:03+0800\n"
+"Report-Msgid-Bugs-To: ualias@bodz.net\n"
+"POT-Creation-Date: 2026-11-06 14:45+0800\n"
 "PO-Revision-Date: 2026-08-20 09:03+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.rs:62
+#: src/main.rs:63
 msgid ""
-"Usage: ualias [OPTION]... [FILE]...\n"
-"Concatenate FILE(s) to standard output. With no FILE, or when FILE is -,\n"
-"read standard input.\n"
+"Usage: ualias [OPTION]... [SERIAL [NAME]]\n"
+"Look up or append a USB device alias in /etc/udev/devices.\n"
+"Without --name (or NAME), print the matching alias. With a name, append a pattern.\n"
 msgstr ""
+"பயன்பாடு: ualias [விருப்பங்கள்]... [வரிசைஎண் [பெயர்]]\n"
+"/etc/udev/devices இல் USB சாதன மாற்றுப்பெயரைத் தேடவும் அல்லது சேர்க்கவும்.\n"
+"--name (அல்லது பெயர்) இல்லையெனில் பொருந்தும் மாற்றுப்பெயரை அச்சிடுக. பெயர் இருந்தால் ஒரு வார்ப்புருவைச் சேர்க்கவும்.\n"
 
-#: src/main.rs:67
+#: src/main.rs:68
 #, c-format
 msgid "Report bugs to: <%s>\n"
-msgstr ""
+msgstr "பிழைகளை அறிவிக்க: <%s>\n"
 
-#: src/main.rs:73 src/main.rs:174
-msgid "repeat for more verbose loggings\n"
-msgstr ""
+#: src/main.rs:74 src/main.rs:142
+msgid "USB vendor id (hex)\n"
+msgstr "USB விற்பனையாளர் அடையாளம் (hex)\n"
 
-#: src/main.rs:74 src/main.rs:185
-msgid "show less logging messages\n"
-msgstr ""
+#: src/main.rs:75 src/main.rs:153
+msgid "USB product id (hex)\n"
+msgstr "USB தயாரிப்பு அடையாளம் (hex)\n"
 
-#: src/main.rs:75 src/main.rs:197
+#: src/main.rs:76 src/main.rs:164
+msgid "device serial / MAC\n"
+msgstr "சாதன வரிசைஎண் / MAC\n"
+
+#: src/main.rs:77 src/main.rs:175
+msgid "alias name (append mode)\n"
+msgstr "மாற்றுப்பெயர் (சேர்க்கும் முறை)\n"
+
+#: src/main.rs:78 src/main.rs:186
+msgid "uppercase the first letter of the name\n"
+msgstr "பெயரின் முதல் எழுத்தை பெரிதாக்கு\n"
+
+#: src/main.rs:79 src/main.rs:197
 msgid "display this help and exit\n"
-msgstr ""
+msgstr "இந்த உதவியைக் காட்டி வெளியேறு\n"
 
-#: src/main.rs:76 src/main.rs:207
+#: src/main.rs:80 src/main.rs:207
 msgid "output version information and exit\n"
-msgstr ""
-
-#: src/main.rs:84
-#, c-format
-msgid "Copyright (C) %d %s\n"
-msgstr ""
+msgstr "பதிப்புத் தகவலைக் காட்டி வெளியேறு\n"
 
 #: src/main.rs:88
-msgid ""
-"License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
-msgstr ""
-
-#: src/main.rs:89
-msgid "This is free software: you are free to change and redistribute it.\n"
-msgstr ""
-
-#: src/main.rs:90
-msgid "This project opposes AI exploitation and AI hegemony.\n"
-msgstr ""
+#, c-format
+msgid "Copyright (C) %d %s\n"
+msgstr "பதிப்புரிமை (C) %d %s\n"
 
 #: src/main.rs:92
-msgid ""
-"This project rejects mindless MIT-style licensing and politically naive BSD-"
-"style licensing.\n"
-msgstr ""
+msgid "License AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+msgstr "உரிமம் AGPL-3.0-or-later: <https://www.gnu.org/licenses/agpl-3.0.html>\n"
+
+#: src/main.rs:93
+msgid "This is free software: you are free to change and redistribute it.\n"
+msgstr "இது கட்டற்ற மென்பொருள்: மாற்றியும் மறுவிநியோகம் செய்யவும் உங்களுக்கு உரிமை உண்டு.\n"
 
 #: src/main.rs:94
+msgid "This project opposes AI exploitation and AI hegemony.\n"
+msgstr "இந்த திட்டம் AI சுரண்டலுக்கும் AI மேலாதிக்கத்திற்கும் எதிரானது.\n"
+
+#: src/main.rs:96
+msgid "This project rejects mindless MIT-style licensing and politically naive BSD-style licensing.\n"
+msgstr "இந்த திட்டம் சிந்தனையற்ற MIT-பாணி உரிமத்தையும் அரசியல் ரீதியாக அப்பாவியான BSD-பாணி உரிமத்தையும் நிராகரிக்கிறது.\n"
+
+#: src/main.rs:98
 msgid "There is NO WARRANTY, to the extent permitted by law.\n"
-msgstr ""
+msgstr "சட்டம் அனுமதிக்கும் அளவில் எந்த உத்தரவாதமும் இல்லை.\n"
 
-#: src/main.rs:154
+#: src/main.rs:215
+msgid "device serial / MAC"
+msgstr "சாதன வரிசைஎண் / MAC"
+
+#: src/main.rs:220
+msgid "alias name (append mode)"
+msgstr "மாற்றுப்பெயர் (சேர்க்கும் முறை)"
+
+#: src/main.rs:258
 #, c-format
-msgid "%s: write error\n"
-msgstr ""
+msgid "%s: missing vendor, product, serial, or name\n"
+msgstr "%s: விற்பனையாளர், தயாரிப்பு, வரிசைஎண் அல்லது பெயர் இல்லை\n"
 
-#: src/main.rs:163
-msgid "hello, world!\n"
-msgstr ""
+#: src/main.rs:293
+msgid "no matching alias"
+msgstr "பொருந்தும் மாற்றுப்பெயர் இல்லை"

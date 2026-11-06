@@ -1,0 +1,116 @@
+= ualias(1)
+Lenik <ualias@bodz.net>
+v{project-version}, {project-year}
+:doctype: manpage
+:manmanual: User Commands
+:mansource: ualias
+:man-linkstyle: blue R <>
+:nofooter:
+
+== Name
+
+ualias - USB 장치 별칭 조회 또는 추가
+
+== Synopsis
+
+*ualias* [_옵션_]... [_시리얼_ [_이름_]]
+
+== Description
+
+*/etc/udev/devices* 의 별칭 표를 읽고(*UALIAS_DEVICES* 로 덮어쓸 수 있음)
+일치하는 별칭을 출력하거나, 이름이 주어지면 새 패턴을 추가합니다.
+
+파일의 주석이 아닌 각 줄은 네 필드입니다:
+
+  VENDOR PRODUCT SERIAL NAME
+
+*\** 값은 와일드카드입니다. 줄은 파일 순서로 시도되며 첫 일치가 채택됩니다.
+따라서 구체적인 시리얼 행을 ESP32-S3용 *303a 1001 \* s3g* 같은
+벤더/제품 폴백보다 앞에 두는 것이 보통입니다.
+
+*--name*(또는 위치 인자 _이름_)이 없으면 일치한 별칭을 표준 출력에 씁니다.
+일치가 없으면 오류를 내고 종료 코드 1입니다.
+
+이름이 있으면 패턴을 추가합니다. 생략된 벤더/제품/시리얼은 *\** 로 기록됩니다.
+
+== Options
+
+*-w, --vendor* _ID_::
+  USB 벤더 ID(보통 네 자리 16진수, *0x* 없음).
+
+*-p, --product* _ID_::
+  USB 제품 ID(보통 네 자리 16진수, *0x* 없음).
+
+*-s, --serial* _SERIAL_::
+  장치 시리얼 또는 MAC 형식 식별자.
+  첫 번째 위치 인자로도 줄 수 있습니다.
+
+*-n, --name* _NAME_::
+  별칭 이름. 이름을 주면 추가 모드가 됩니다.
+  두 번째 위치 인자로도 줄 수 있습니다(위치 시리얼 필요).
+
+*-u, --ucfirst*::
+  별칭 이름의 첫 글자를 대문자로 만듭니다(출력 또는 추가 시 기록).
+
+*-h, --help*::
+  사용법 요약을 출력하고 성공적으로 종료합니다.
+
+*--version*::
+  버전과 라이선스 정보를 출력하고 성공적으로 종료합니다.
+
+== Environment
+
+*UALIAS_DEVICES*::
+  장치 표 경로. 기본값: */etc/udev/devices*.
+
+*UALIAS_LOCALEDIR*::
+  gettext 로케일 디렉터리를 덮어씁니다.
+
+== Exit status
+
+*0*::
+  성공.
+
+*1*::
+  일치 없음, 인자 누락 또는 I/O 오류.
+
+*2*::
+  잘못된 명령줄 옵션.
+
+== Examples
+
+시리얼로 조회:
+
+  ualias 44:1B:F6:D7:92:5C
+
+시리얼을 모를 때 벤더/제품으로 ESP32-S3 조회(*s3g* 로 폴백):
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+시리얼 매핑 추가:
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+벤더/제품 폴백 추가:
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  기본 별칭 표.
+
+== Author
+
+{project-author} <{project-email}> 작성.
+
+== Copyright
+
+Copyright (C) {project-year}.
+License AGPL-3.0-or-later.
+이것은 자유 소프트웨어입니다. GNU Affero General Public License 조건에 따라
+변경하고 재배포할 수 있습니다.
+법이 허용하는 범위에서 보증은 없습니다.
+전체 라이선스 텍스트는 소스 배포의 LICENSE 파일을 보세요.
+추가 조항으로 이 프로젝트는 AI 착취와 AI 패권에 반대하며, 무분별한 MIT 스타일
+라이선싱과 정치적으로 순진한 BSD 스타일 라이선싱을 거부합니다.

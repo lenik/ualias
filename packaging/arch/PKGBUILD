@@ -3,7 +3,7 @@
 pkgname=ualias
 pkgver=0.0.0
 pkgrel=1
-pkgdesc="Meson-based CLI template"
+pkgdesc="Look up or append USB device aliases"
 arch=('any')
 url="https://github.com/lenik/ualias"
 license=('AGPL-3.0-or-later')

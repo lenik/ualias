@@ -1,0 +1,117 @@
+= ualias(1)
+Lenik <ualias@bodz.net>
+v{project-version}, {project-year}
+:doctype: manpage
+:manmanual: User Commands
+:mansource: ualias
+:man-linkstyle: blue R <>
+:nofooter:
+
+== Name
+
+ualias - USB デバイス別名の検索または追加
+
+== Synopsis
+
+*ualias* [_オプション_]... [_シリアル_ [_名前_]]
+
+== Description
+
+*/etc/udev/devices* の別名表を読み（*UALIAS_DEVICES* で上書き可）、一致する別名を
+出力するか、名前が与えられたときに新しいパターンを追加します。
+
+ファイルのコメント以外の各行は 4 フィールドです:
+
+  VENDOR PRODUCT SERIAL NAME
+
+*\** はワイルドカードです。行はファイル順に試し、最初の一致が採用されます。
+そのため具体的なシリアル行を、ESP32-S3 向けの *303a 1001 \* s3g* のような
+ベンダー/プロダクトのフォールバックより前に置くのが普通です。
+
+*--name*（または位置引数の _名前_）がなければ、一致した別名を標準出力へ出します。
+一致がなければエラーを出して終了コード 1 です。
+
+名前があるときはパターンを追加します。省略したベンダー/プロダクト/シリアルは
+*\** として書き込みます。
+
+== Options
+
+*-w, --vendor* _ID_::
+  USB ベンダー ID（通常は 4 桁の 16 進、*0x* なし）。
+
+*-p, --product* _ID_::
+  USB プロダクト ID（通常は 4 桁の 16 進、*0x* なし）。
+
+*-s, --serial* _SERIAL_::
+  デバイスシリアルまたは MAC 風識別子。
+  第 1 位置引数としても指定できます。
+
+*-n, --name* _NAME_::
+  別名。名前を指定すると追加モードになります。
+  第 2 位置引数としても指定できます（位置シリアルが必要）。
+
+*-u, --ucfirst*::
+  別名の先頭文字を大文字にします（出力時、または追加時の書き込み）。
+
+*-h, --help*::
+  使い方を表示して正常終了します。
+
+*--version*::
+  バージョンとライセンスを表示して正常終了します。
+
+== Environment
+
+*UALIAS_DEVICES*::
+  デバイス表のパス。既定: */etc/udev/devices*。
+
+*UALIAS_LOCALEDIR*::
+  gettext のロケールディレクトリを上書きします。
+
+== Exit status
+
+*0*::
+  成功。
+
+*1*::
+  不一致、引数不足、または I/O エラー。
+
+*2*::
+  不正なコマンドラインオプション。
+
+== Examples
+
+シリアルで検索:
+
+  ualias 44:1B:F6:D7:92:5C
+
+シリアル未知の ESP32-S3 をベンダー/プロダクトで検索（*s3g* にフォールバック）:
+
+  ualias -w 303a -p 1001 -s DEADBEEF
+
+シリアル対応を追加:
+
+  ualias 44:1B:F6:D7:92:5C s3cam
+
+ベンダー/プロダクトのフォールバックを追加:
+
+  ualias -w 303a -p 1001 -n s3g
+
+== Files
+
+*/etc/udev/devices*::
+  既定の別名表。
+
+== Author
+
+{project-author} <{project-email}> が作成。
+
+== Copyright
+
+Copyright (C) {project-year}.
+License AGPL-3.0-or-later.
+これはフリーソフトウェアです。GNU Affero General Public License の条件の下で
+変更および再配布できます。
+法律で認められる範囲で、保証は一切ありません。
+完全なライセンス文はソース配布の LICENSE を参照してください。
+補足条項として、本プロジェクトは AI 搾取と AI 覇権に反対し、無思慮な MIT 系
+ライセンスおよび政治的に素朴な BSD 系ライセンスを拒否します。
