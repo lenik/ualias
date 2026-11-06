@@ -5,6 +5,12 @@ set -euf
 out="$1"
 root="$2"
 b="$3"
+# Meson passes @OUTPUT@ as a bare name; resolve it under the build dir before
+# we cd into $root for cargo.
+case "$out" in
+  /*) ;;
+  *) out="${b}/${out}" ;;
+esac
 export CARGO_TARGET_DIR="${b}/cargo-target"
 # Avoid broken sccache in some environments; Meson can override via env in tests.
 [ "${UALIAS_CARGO_ENABLE_SCCACHE:-0}" = 1 ] || unset RUSTC_WRAPPER

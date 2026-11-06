@@ -19,7 +19,20 @@ MINGW_CC := $(shell command -v x86_64-w64-mingw32-gcc 2>/dev/null)
 all:
 	"$(HOST_SH)" run $(KIND) -- $(MAKE) -C "$(CURDIR)" local
 
-local: $(ARTIFACT)
+local:
+	@set -e; \
+	if [ -z "$$OS" ] || [ "$$OS" != Windows_NT ]; then \
+		if [ -z "$(MINGW_CC)" ]; then \
+			echo "mingw: skip (no x86_64-w64-mingw32-gcc)" >&2; \
+			exit 0; \
+		fi; \
+		_sysroot=$$(rustc --print sysroot 2>/dev/null || true); \
+		if [ ! -d "$$_sysroot/lib/rustlib/x86_64-pc-windows-gnu/lib" ]; then \
+			echo "mingw: skip (no x86_64-pc-windows-gnu std in $$_sysroot)" >&2; \
+			exit 0; \
+		fi; \
+	fi; \
+	$(MAKE) $(ARTIFACT)
 
 stage:
 	rm -rf "$(STAGE)" "$(BUILD)"

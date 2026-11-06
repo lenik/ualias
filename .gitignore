@@ -40,6 +40,7 @@
 *.le
 *.lo
 *.lock
+!Cargo.lock
 *.lof
 *.log
 *.log.[0-9]*

@@ -99,12 +99,13 @@ custom_target(
 )
 
 # Whole-document translated man pages → $mandir/<locale>/man1/
+# (Meson forbids path segments in custom_target output names.)
 man_locales = ['ar', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'zh_CN']
 foreach loc : man_locales
-    custom_target(
+    _loc_man = custom_target(
         'ualias-man-' + loc,
         input: 'man' / loc / 'ualias.adoc',
-        output: loc + '/man1/ualias.1',
+        output: 'ualias-' + loc + '.1',
         command: [
             asciidoctor,
             '-b', 'manpage',
@@ -116,8 +117,17 @@ foreach loc : man_locales
             '@INPUT@',
         ],
         build_by_default: true,
-        install: true,
-        install_dir: mandir,
+    )
+    meson.add_install_script(
+        'sh',
+        '-c',
+        'base="${MESON_INSTALL_DESTDIR_PREFIX:-${DESTDIR:-}${MESON_INSTALL_PREFIX}}"; '
+        + 'install -D -m644 "$1" "$base/@0@/@1@/man1/ualias.1"'.format(
+            get_option('mandir'),
+            loc,
+        ),
+        '_',
+        _loc_man,
     )
 endforeach
 
